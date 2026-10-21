@@ -565,7 +565,7 @@ body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
         <div class="unit">saniyedir bu dünyadasın</div>
       </div>
       <p class="lead" id="lifeFacts"></p>
-      <p class="lead">Bu sayfa senin için. İçinde birkaç sürpriz daha saklı.</p>
+      <p class="lead" id="lifeDay"></p>
       <button class="btn" data-next>Sürprizlere başla</button>
     </div>
   </section>
@@ -942,9 +942,9 @@ const sfx = {
 
 /* ---------- Ortak ---------- */
 const toastEl = $("#toast"); let toastT;
-function toast(msg) {
+function toast(msg, ms = 3200) {
   toastEl.textContent = msg; toastEl.classList.add("show");
-  clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove("show"), 3200);
+  clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove("show"), ms);
 }
 const center = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
 function show(el) { el.hidden = false; el.classList.remove("pop-in"); void el.offsetWidth; el.classList.add("pop-in"); }
@@ -1006,7 +1006,13 @@ function startLifetime() {
   let turns = now.getFullYear() - CONFIG.birth.year;
   if (now < new Date(now.getFullYear(), CONFIG.birth.month - 1, CONFIG.birth.day)) turns--;
   const s = secs(), days = Math.floor(s / 86400), beats = Math.round(s / 60 * 85 / 1e6);
-  $("#lifeFacts").textContent = `Yani tam ${days.toLocaleString("tr-TR")} gün. Bu sürede Dünya güneşin etrafında ${turns} tur attı, kalbin de yaklaşık ${beats.toLocaleString("tr-TR")} milyon kez attı.`;
+  const km = (s / 86400 / 365.256 * 940e6 / 1e9).toLocaleString("tr-TR", { maximumFractionDigits: 1 });
+  const moons = Math.floor(s / 86400 / 29.530588853);
+  $("#lifeFacts").textContent = `Yani tam ${days.toLocaleString("tr-TR")} gün. Bu sürede Dünya güneşin etrafında ${turns} tur attı ve sen de onunla birlikte uzayda yaklaşık ${km} milyar km yol aldın. Gökyüzünde ${moons} dolunay gördün, kalbin de yaklaşık ${beats.toLocaleString("tr-TR")} milyon kez attı.`;
+  const wd = BIRTH.toLocaleDateString("tr-TR", { weekday: "long" }).toLocaleLowerCase("tr");
+  const wdSuffix = { "pazartesi": "ydi", "salı": "ydı", "çarşamba": "ydı", "perşembe": "ydi", "cuma": "ydı", "cumartesi": "ydi", "pazar": "dı" }[wd] || "";
+  const bd = BIRTH.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" });
+  $("#lifeDay").textContent = `Bir de şunu biliyor muydun? ${bd} bir ${wd}${wdSuffix}.`;
   clearInterval(lifeTimer);
   const t0 = performance.now();
   const anim = t => {
@@ -1367,6 +1373,19 @@ function drawConstellation(t) {
     bctx.beginPath(); bctx.moveTo(...P[a]);
     bctx.lineTo(P[a][0] + (P[b][0] - P[a][0]) * f, P[a][1] + (P[b][1] - P[a][1]) * f); bctx.stroke();
   }
+  if (c.special) {
+    const sp = c.special, k = Math.min(1, (t - sp.t0) / 1500), pulse = .5 + .5 * Math.sin((t - sp.t0) / 380);
+    bctx.globalAlpha = c.alpha * k;
+    bctx.strokeStyle = tok("--coral"); bctx.lineWidth = 1.2;
+    bctx.beginPath(); bctx.arc(sp.x, sp.y, 12 + pulse * 10, 0, 6.28); bctx.stroke();
+    bctx.fillStyle = tok("--coral");
+    bctx.beginPath(); bctx.arc(sp.x, sp.y, 3.2, 0, 6.28); bctx.fill();
+    bctx.globalAlpha = .3 * c.alpha * k;
+    bctx.beginPath(); bctx.arc(sp.x, sp.y, 9, 0, 6.28); bctx.fill();
+    bctx.globalAlpha = c.alpha * k; bctx.fillStyle = tok("--muted");
+    bctx.font = `600 12px ${tok("--body")}`; bctx.textAlign = sp.x > W / 2 ? "right" : "left";
+    bctx.fillText("Wolf 1061 · 14 ışık yılı", sp.x + (sp.x > W / 2 ? -26 : 26), sp.y + 4);
+  }
   for (const [x, y] of P) {
     bctx.globalAlpha = .25 * c.alpha; bctx.fillStyle = tok("--butter");
     bctx.beginPath(); bctx.arc(x, y, 7, 0, 6.28); bctx.fill();
@@ -1386,10 +1405,27 @@ function gaze() {
   cons = buildConstellation();
   if (reduced) { cons.start -= 10000; drawStars(performance.now()); }
   sfx.chime();
-  gazeTimer = setTimeout(endGaze, 13000);
+  gazeTimer = setTimeout(starPhase, 9500);
+}
+// İkinci an: doğduğu gün yola çıkan ışık
+let starTimer = null;
+function starPhase() {
+  const msg = $("#gazeMsg");
+  msg.style.transition = "opacity .8s"; msg.style.opacity = "0";
+  if (cons) cons.special = { x: W * .8, y: Math.max(70, H * .12), t0: performance.now() };
+  if (reduced) drawStars(performance.now());
+  starTimer = setTimeout(() => {
+    $("#gazeTitle").textContent = "14 ışık yılı uzaktan bir selam";
+    $("#gazeSub").textContent = "Wolf 1061 adında bir yıldız bize yaklaşık 14 ışık yılı uzakta. Sen doğduğun gün ondan yola çıkan ışık, şimdi Dünya'ya ulaşıyor. Gözle görünmüyor ama orada.";
+    msg.style.opacity = "1";
+    sfx.chime();
+  }, 900);
+  gazeTimer = setTimeout(endGaze, 10000);
 }
 function endGaze() {
-  clearTimeout(gazeTimer);
+  clearTimeout(gazeTimer); clearTimeout(starTimer);
+  const msg = $("#gazeMsg"); msg.style.opacity = ""; msg.style.transition = "";
+
   document.body.classList.remove("gazing");
   if (cons) cons.fading = true;
   if (reduced) { cons = null; drawStars(0); }
@@ -1397,7 +1433,7 @@ function endGaze() {
 }
 $("#gaze").addEventListener("click", gaze);
 document.addEventListener("click", () => {
-  if (document.body.classList.contains("gazing") && performance.now() - gazeStart > 6500) endGaze();
+  if (document.body.classList.contains("gazing") && performance.now() - gazeStart > 14000) endGaze();
 });
 
 $("#restart").addEventListener("click", () => {
@@ -1419,10 +1455,25 @@ $("#moon").addEventListener("click", () => {
   if (left > 0) { if (moonTaps >= 2) toast(left === 1 ? "Bir kez daha…" : `${left} kez daha dokun`); }
   else {
     moonTaps = 0;
-    heartRain(150); sfx.chime();
-    toast("Gizli sürprizi buldun. Ay bile bugün senin için parlıyor");
+    const [x, y] = center(m);
+    sparks(x, y, tok("--butter"), 120, 7); sparks(x, y, tok("--cream"), 60, 4);
+    sfx.chime();
+    toast(moonMessage(), 7000);
   }
 });
+// Doğduğu gecenin ay evresi (yaklaşık, sinodik aya göre)
+function moonMessage() {
+  const syn = 29.530588853, ref = Date.UTC(2000, 0, 6, 18, 14);
+  const night = new Date(CONFIG.birth.year, CONFIG.birth.month - 1, CONFIG.birth.day, 21);
+  const age = (((night - ref) / 864e5) % syn + syn) % syn;
+  const illum = Math.round((1 - Math.cos(2 * Math.PI * age / syn)) / 2 * 100);
+  let tail;
+  if (illum >= 98) tail = "Dolunaydı.";
+  else if (illum >= 85) tail = `%${illum} oranında aydınlıktı, neredeyse dolunaydı.`;
+  else if (illum <= 3) tail = "Yeni aydı, gökyüzü yıldızlara kalmıştı.";
+  else tail = `%${illum} oranında aydınlıktı.`;
+  return `Gizli sürprizi buldun. Sen doğduğun gece de ay gökyüzündeydi. ${tail}`;
+}
 
 /* Başlat */
 resize();
