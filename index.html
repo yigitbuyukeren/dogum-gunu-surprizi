@@ -31,6 +31,11 @@ img { max-width: 100%; }
   --paper: #fff8ef;
   --paper-ink: #3a2357;
   --cream: #fff1dc;
+  --sea-1: #24418f;
+  --sea-2: #3566c9;
+  --sea-3: #5d9be8;
+  --glass: rgba(124, 231, 201, .26);
+  --cork: #c38b5a;
   --display: "Caprasimo", "Cooper Black", Georgia, serif;
   --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --hand: "Caveat", "Bradley Hand", "Comic Sans MS", cursive;
@@ -296,35 +301,49 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 #scratchCanvas { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; transition: opacity .7s; }
 #scratchCanvas.gone { opacity: 0; pointer-events: none; }
 
-/* 5 — Zarf ve mektup */
-.envelope {
-  position: relative; width: min(320px, 86vw); aspect-ratio: 3 / 2; max-width: 100%;
-  background: none; border: 0; padding: 0; cursor: pointer; perspective: 900px;
-  animation: hover 2.6s ease-in-out infinite;
+/* 5 — Şişedeki mesaj */
+.sea { position: relative; width: 100%; max-width: 520px; height: 230px; overflow: hidden; }
+.wave {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 60' preserveAspectRatio='none'><path d='M0 12 Q50 0 100 12 T200 12 T300 12 T400 12 V60 H0Z'/></svg>") 0 0 / 400px 100% repeat-x;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 60' preserveAspectRatio='none'><path d='M0 12 Q50 0 100 12 T200 12 T300 12 T400 12 V60 H0Z'/></svg>") 0 0 / 400px 100% repeat-x;
+  animation: waveMove var(--sp) linear infinite;
 }
-@keyframes hover { 50% { transform: translateY(-8px) rotate(-1deg); } }
-.envelope > span { position: absolute; inset: 0; display: block; }
-.env-back { background: var(--pink-deep); border-radius: 10px; }
-.env-letter {
-  inset: 8% 7% 6% 7% !important; background: var(--paper); border-radius: 6px; z-index: 1;
-  transition: transform .9s cubic-bezier(.3,1.2,.5,1) .45s;
-  background-image: repeating-linear-gradient(transparent 0 16px, rgba(58, 35, 87, .12) 16px 17px);
-  background-position: 0 30px;
+@keyframes waveMove { to { -webkit-mask-position: 400px 0; mask-position: 400px 0; } }
+.w3 { height: 120px; background: var(--sea-1); --sp: 9s; z-index: 1; }
+.w2 { height: 88px; background: var(--sea-2); --sp: 6s; z-index: 3; opacity: .92; animation-direction: reverse; }
+.w1 { height: 54px; background: var(--sea-3); --sp: 4s; z-index: 4; opacity: .7; }
+.bottle {
+  position: absolute; z-index: 2; left: 50%; bottom: 60px; width: 152px; height: 56px; margin-left: -76px;
+  border: 0; padding: 0; background: none; cursor: pointer;
+  animation: drift 3.4s cubic-bezier(.2,.8,.3,1) both, float 2.8s ease-in-out 3.4s infinite;
 }
-.env-front { background: var(--pink); clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%); border-radius: 10px; z-index: 2; }
-.env-flap {
-  background: #f06aa3; clip-path: polygon(0 0, 100% 0, 50% 60%); border-radius: 10px; z-index: 3;
-  transform-origin: 50% 0; transition: transform .6s ease-in-out, z-index 0s .3s;
+@keyframes drift { from { transform: translateX(-90vw) rotate(-14deg); } 65% { transform: translateX(12px) rotate(6deg); } to { transform: none; } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-9px) rotate(4deg); } }
+.bottle .glass {
+  position: absolute; left: 0; top: 0; width: 112px; height: 56px; box-sizing: border-box;
+  border-radius: 24px 16px 16px 24px; background: var(--glass); border: 2px solid var(--mint);
 }
-.seal {
-  inset: auto !important; left: 50% !important; top: 50% !important; width: 46px; height: 46px; margin: -30px 0 0 -23px;
-  border-radius: 50%; background: var(--butter); z-index: 4; display: grid !important; place-items: center;
-  color: var(--pink-deep); font-size: 22px; box-shadow: 0 4px 0 #c99a2e; transition: transform .4s, opacity .3s;
+.bottle .glass::after {
+  content: ""; position: absolute; right: -28px; top: 14px; width: 28px; height: 24px; box-sizing: border-box;
+  background: var(--glass); border: 2px solid var(--mint); border-left: 0; border-radius: 0 6px 6px 0;
 }
-.envelope.open { animation: none; cursor: default; }
-.envelope.open .env-flap { transform: rotateX(180deg); z-index: 0; }
-.envelope.open .seal { transform: scale(0); opacity: 0; }
-.envelope.open .env-letter { transform: translateY(-55%); }
+.bottle .glass::before {
+  content: ""; position: absolute; z-index: 2; left: 12px; top: 7px; width: 58px; height: 6px; border-radius: 6px;
+  background: rgba(255, 255, 255, .45);
+}
+.bottle .scroll {
+  position: absolute; left: 22px; top: 14px; width: 62px; height: 24px; border-radius: 6px; background: var(--paper);
+  box-shadow: inset 7px 0 0 rgba(58, 35, 87, .12), inset -7px 0 0 rgba(58, 35, 87, .12);
+  transition: transform 1s cubic-bezier(.3,1.3,.5,1) .4s, opacity .4s 1.2s;
+}
+.bottle .cork {
+  position: absolute; right: 0; top: 16px; width: 14px; height: 22px; border-radius: 3px; background: var(--cork);
+  transition: transform .6s cubic-bezier(.2,1.4,.4,1), opacity .4s .4s;
+}
+.bottle.open { animation-play-state: paused; cursor: default; }
+.bottle.open .cork { transform: translate(60px, -100px) rotate(160deg); opacity: 0; }
+.bottle.open .scroll { transform: translate(40px, -130px) rotate(-10deg) scale(1.7); opacity: 0; }
 .letter {
   width: 100%; max-width: 520px; box-sizing: border-box; text-align: left;
   background: var(--paper); color: var(--paper-ink);
@@ -340,6 +359,50 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 @keyframes blink { 50% { opacity: 0; } }
 .letter .sign { font: 700 26px/1.2 var(--hand); color: var(--pink-deep); text-align: right; margin: 10px 0 0; opacity: 0; transition: opacity .8s; }
 .letter.done .sign { opacity: 1; }
+
+/* Dilek feneri */
+.lantern-ask { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; max-width: 380px; }
+.wish-input {
+  width: 100%; box-sizing: border-box; text-align: center;
+  font: 500 24px/1.2 var(--hand); color: var(--ink);
+  padding: 12px 16px; border-radius: 14px; border: 2px solid var(--muted); background: rgba(255, 255, 255, .06);
+}
+.wish-input::placeholder { color: var(--muted); opacity: .7; }
+.wish-input:focus { outline: none; border-color: var(--butter); }
+.lantern {
+  position: fixed; z-index: 40; width: 64px; height: 80px; margin-left: -32px; pointer-events: none;
+  filter: drop-shadow(0 0 18px rgba(255, 180, 90, .8));
+  animation: rise 7.5s ease-in forwards;
+}
+.lantern::before {
+  content: ""; position: absolute; inset: 0; border-radius: 6px;
+  clip-path: polygon(14% 0, 86% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg, var(--coral), var(--butter) 70%, var(--cream));
+}
+.lantern span {
+  position: absolute; left: 10%; right: 10%; top: 30%; max-height: 46%; overflow: hidden;
+  font: 700 13px/1.05 var(--hand); color: var(--paper-ink); text-align: center; overflow-wrap: anywhere;
+}
+@keyframes rise {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  8% { opacity: 1; }
+  30% { transform: translate(18px, -25vh) scale(.85) rotate(4deg); }
+  60% { transform: translate(-14px, -55vh) scale(.6) rotate(-4deg); }
+  100% { transform: translate(10px, -95vh) scale(.25); opacity: 0; }
+}
+
+/* Gökyüzüne bak */
+.stage, .moon { transition: opacity 1s; }
+body.gazing .stage, body.gazing .moon { opacity: 0; pointer-events: none; }
+.gaze-msg {
+  position: fixed; z-index: 5; left: 0; right: 0; top: 58%; margin: 0; text-align: center; pointer-events: none;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 10px; align-items: center;
+  opacity: 0; transition: opacity .6s;
+}
+.gaze-msg strong { font: 700 clamp(28px, 6.5vw, 40px)/1.15 var(--hand); color: var(--butter); text-wrap: balance; }
+.gaze-msg span { font-size: 16px; color: var(--muted); max-width: 36ch; text-wrap: balance; }
+body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
 
 /* 6 — Final */
 .finale-title { font-size: clamp(46px, 13vw, 104px); line-height: 1; display: flex; flex-wrap: wrap; justify-content: center; column-gap: .28em; }
@@ -369,6 +432,7 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 <div class="dots" id="dots" aria-hidden="true"></div>
 <button class="sound" id="sound" aria-pressed="false">♪ Ses kapalı</button>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+<p class="gaze-msg" id="gazeMsg" aria-live="polite"><strong id="gazeTitle"></strong><span id="gazeSub"></span></p>
 
 <main class="stage">
   <!-- 1 -->
@@ -406,14 +470,21 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
       <button class="btn ghost" id="blowAll">Hepsini birden üfle</button>
     </div>
     <div class="gift-reveal" id="wishReveal" hidden>
-      <h2>Dileğin yolda!</h2>
-      <button class="btn" data-next>Devam et</button>
+      <div class="lantern-ask" id="lanternAsk">
+        <label class="lead" for="wishInput">Şimdi yeni yaşın için bir dilek yaz. Kimse görmeyecek, sadece gökyüzü.</label>
+        <input class="wish-input" id="wishInput" maxlength="48" autocomplete="off" placeholder="Dileğim…">
+        <button class="btn" id="releaseLantern">Feneri gökyüzüne bırak</button>
+      </div>
+      <div class="gift-reveal" id="wishDone" hidden>
+        <h2>Dileğin yola çıktı</h2>
+        <button class="btn" data-next>Devam et</button>
+      </div>
     </div>
   </section>
 
   <!-- 3 -->
   <section class="scene" data-scene="2">
-    <p class="eyebrow">Balonların içinde bir şey var</p>
+    <p class="eyebrow">Balonların içinde senin hakkında gerçekler var</p>
     <h2>Patlat ve oku</h2>
     <div class="sky" id="sky"></div>
     <ul class="notes" id="notes" aria-live="polite"></ul>
@@ -423,7 +494,7 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
   <!-- 4 -->
   <section class="scene" data-scene="3">
     <p class="eyebrow">Kazı kazan</p>
-    <h2>Altında bir hediye kuponu var</h2>
+    <h2>Altında küçük bir söz var</h2>
     <div class="scratch" id="scratch">
       <div class="prize">
         <small>Hediye kuponu · geçerlilik: sen ne zaman istersen</small>
@@ -438,16 +509,18 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 
   <!-- 5 -->
   <section class="scene" data-scene="4">
-    <p class="eyebrow">Postacı geldi</p>
-    <h2 id="envTitle">Sana bir mektup</h2>
-    <button class="envelope" id="envelope" aria-label="Zarfı aç">
-      <span class="env-back"></span>
-      <span class="env-letter"></span>
-      <span class="env-front"></span>
-      <span class="env-flap"></span>
-      <span class="seal">♥</span>
-    </button>
-    <p class="hint" id="envHint">Mührü kır</p>
+    <p class="eyebrow">Denizden sana bir şey geldi</p>
+    <h2 id="envTitle">Bir şişe kıyıya vuruyor</h2>
+    <div class="sea" id="sea">
+      <span class="wave w3"></span>
+      <button class="bottle" id="bottle" aria-label="Şişeyi aç">
+        <span class="glass"><span class="scroll"></span></span>
+        <span class="cork"></span>
+      </button>
+      <span class="wave w2"></span>
+      <span class="wave w1"></span>
+    </div>
+    <p class="hint" id="envHint">Şişeye dokun</p>
     <article class="letter" id="letter" hidden>
       <div class="text" id="letterText"></div>
       <p class="sign" id="letterSign"></p>
@@ -459,9 +532,10 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
   <section class="scene" data-scene="5" id="finale">
     <h1 class="finale-title" id="finaleTitle" aria-label="İyi ki doğdun"></h1>
     <p class="finale-name nm"></p>
-    <p class="lead">Gökyüzüne dokun, havai fişek patlasın. Bir de aya dokunmayı dene.</p>
+    <p class="lead" id="finaleLead"></p>
     <div class="row">
-      <button class="btn" id="hearts">Kalp yağmuru</button>
+      <button class="btn" id="gaze">Gökyüzüne bak</button>
+      <button class="btn ghost" id="hearts">Kalp yağmuru</button>
       <button class="btn ghost" id="restart">Baştan izle</button>
     </div>
   </section>
@@ -470,7 +544,8 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 <script>
 /* ====== BURAYI KİŞİSELLEŞTİR ====== */
 const CONFIG = {
-  name: "Doğum günü kızı",
+  name: "Ada",
+  age: 14,
   candles: 14,
   reasons: [
     "Gülüşün bulunduğu her yeri aydınlatıyor.",
@@ -491,7 +566,9 @@ const CONFIG = {
 };
 CONFIG.letter = CONFIG.letter || `${CONFIG.name},
 
-Bugün senin doğum günün ve bunu sessizce geçirmek istemedim. Bu küçük sayfayı seni biraz gülümsetebilmek için hazırladım.
+Bu şişe sana denizden geldi. İçinde sadece sana yazılmış birkaç satır var.
+
+Bugün ${CONFIG.age} yaşına giriyorsun ve bunu sessizce geçirmek istemedim. Bu küçük sayfayı seni biraz gülümsetebilmek için hazırladım.
 
 Seni tanıdığım için çok mutluyum. Hayatımda olman benim için çok değerli.
 
@@ -541,6 +618,7 @@ function drawStars(t) {
     bctx.beginPath(); bctx.arc(s.x, s.y, s.r, 0, 6.28); bctx.fill();
   }
   bctx.globalAlpha = 1;
+  if (cons) drawConstellation(t);
   if (shooting) {
     const s = shooting;
     s.x += s.vx; s.y += s.vy; s.life -= .015;
@@ -789,6 +867,7 @@ function buildCandles() {
     box.appendChild(c);
   }
   $("#wishReveal").hidden = true; $("#blowAll").hidden = false;
+  $("#lanternAsk").hidden = false; $("#wishDone").hidden = true; $("#wishInput").value = "";
   updateCount();
 }
 function updateCount() {
@@ -807,9 +886,25 @@ function wished() {
     confetti(x, y, 160, 12);
     for (let i = 0; i < 4; i++) setTimeout(() => rocket(rand(W * .15, W * .85)), i * 260);
     show($("#wishReveal"));
-    toast("Dileğini kimseye söyleme, yoksa gerçekleşmez");
   }, 500);
 }
+// Dilek yalnızca bu sayfada kalır, hiçbir yere gönderilmez
+function releaseLantern() {
+  const txt = $("#wishInput").value.trim();
+  const [x] = center($(".cake"));
+  const y = $(".cake").getBoundingClientRect().top;
+  const l = document.createElement("div");
+  l.className = "lantern"; l.style.left = x + "px"; l.style.top = (y - 40) + "px";
+  const s = document.createElement("span"); s.textContent = txt || "♥"; l.appendChild(s);
+  document.body.appendChild(l);
+  setTimeout(() => l.remove(), 7800);
+  setTimeout(() => sparks(x, H * .08, tok("--butter"), 40, 3), reduced ? 100 : 6800);
+  sfx.chime();
+  $("#lanternAsk").hidden = true;
+  setTimeout(() => { show($("#wishDone")); toast("Dileğini kimseye söyleme, yoksa gerçekleşmez"); }, 1800);
+}
+$("#releaseLantern").addEventListener("click", releaseLantern);
+$("#wishInput").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); $("#wishInput").blur(); releaseLantern(); } });
 $("#blowAll").addEventListener("click", () => {
   $$(".candle:not(.out)").forEach((c, i) => setTimeout(() => blow(c), i * 110));
 });
@@ -900,24 +995,27 @@ $("#couponTitle").textContent = CONFIG.coupon.title;
 $("#couponText").textContent = CONFIG.coupon.text;
 
 /* 5 — Mektup */
-const env = $("#envelope");
+const bottle = $("#bottle");
 let typeTimer = null;
 function resetLetter() {
   clearTimeout(typeTimer);
-  env.classList.remove("open"); env.hidden = false;
-  $("#envHint").hidden = false; $("#envTitle").textContent = "Sana bir mektup";
+  bottle.classList.remove("open"); $("#sea").hidden = false;
+  bottle.style.animation = "none"; void bottle.offsetWidth; bottle.style.animation = "";
+  $("#envHint").hidden = false; $("#envTitle").textContent = "Bir şişe kıyıya vuruyor";
   $("#letter").hidden = true; $("#letter").classList.remove("done");
   $("#letterText").textContent = ""; $("#letterNext").hidden = true;
 }
-env.addEventListener("click", () => {
-  if (env.classList.contains("open")) return;
-  env.classList.add("open"); sfx.whoosh();
+bottle.addEventListener("click", () => {
+  if (bottle.classList.contains("open")) return;
+  bottle.classList.add("open"); sfx.pop();
   $("#envHint").hidden = true;
-  const [x, y] = center(env); sparks(x, y, tok("--butter"), 40, 4);
+  const r = bottle.getBoundingClientRect();
+  sparks(r.right, r.top + 26, tok("--butter"), 40, 4);
+  setTimeout(() => sfx.whoosh(), 400);
   setTimeout(() => {
-    env.hidden = true; $("#envTitle").textContent = "Oku bakalım";
+    $("#sea").hidden = true; $("#envTitle").textContent = "Şişedeki mesaj";
     show($("#letter")); typeLetter();
-  }, reduced ? 200 : 1500);
+  }, reduced ? 200 : 1700);
 });
 function typeLetter() {
   const el = $("#letterText"), txt = CONFIG.letter;
@@ -966,6 +1064,83 @@ document.querySelector(".stage").addEventListener("click", e => {
   if (current === 5 && e.target === e.currentTarget) rocket(e.clientX, e.clientY);
 });
 $("#hearts").addEventListener("click", () => { heartRain(110); sfx.chime(); });
+$("#finaleLead").textContent = `${CONFIG.age}. yaşın kutlu olsun. Gökyüzüne dokun, havai fişek patlasın.`;
+
+/* Yıldızlardan isim */
+const LETTERS = {
+  A: [[[0, 1], [.31, 0], [.62, 1]], [[.14, .58], [.48, .58]]],
+  D: [[[0, 0], [0, 1], [.42, .92], [.62, .5], [.42, .08], [0, 0]]],
+  E: [[[.6, 0], [0, 0], [0, 1], [.6, 1]], [[0, .5], [.45, .5]]],
+  İ: [[[.3, -.16]], [[.3, .12], [.3, 1]]],
+  I: [[[.3, 0], [.3, 1]]],
+  N: [[[0, 1], [0, 0], [.62, 1], [.62, 0]]],
+  Z: [[[0, 0], [.62, 0], [0, 1], [.62, 1]]]
+};
+function buildConstellation() {
+  const word = [...CONFIG.name.toLocaleUpperCase("tr")].filter(ch => LETTERS[ch]);
+  const unit = .95, totalW = (word.length - 1) * unit + .62;
+  const s = Math.min(W * .82 / totalW, H * .24);
+  const ox = (W - totalW * s) / 2, oy = H * .34 - s / 2;
+  const pts = [], segs = [], map = {};
+  word.forEach((ch, li) => LETTERS[ch].forEach(line => {
+    let prev = -1;
+    line.forEach(([x, y]) => {
+      const px = ox + (li * unit + x) * s, py = oy + y * s;
+      const key = Math.round(px) + "," + Math.round(py);
+      let idx = map[key];
+      if (idx === undefined) { idx = pts.length; map[key] = idx; pts.push({ x: px, y: py, sx: rand(0, W), sy: rand(0, H) }); }
+      if (prev >= 0) segs.push([prev, idx]);
+      prev = idx;
+    });
+  }));
+  return { pts, segs, start: performance.now(), alpha: 1, fading: false };
+}
+let cons = null;
+function drawConstellation(t) {
+  const c = cons;
+  if (c.fading) { c.alpha -= .02; if (c.alpha <= 0) { cons = null; return; } }
+  const e = Math.min(1, Math.max(0, (t - c.start) / 2400)), ease = 1 - Math.pow(1 - e, 3);
+  const lp = Math.min(1, Math.max(0, (t - c.start - 2200) / 2600));
+  const P = c.pts.map(p => [p.sx + (p.x - p.sx) * ease, p.sy + (p.y - p.sy) * ease]);
+  bctx.strokeStyle = tok("--butter"); bctx.lineWidth = 1.5; bctx.globalAlpha = .55 * c.alpha;
+  const n = c.segs.length * lp;
+  for (let i = 0; i < Math.ceil(n); i++) {
+    const [a, b] = c.segs[i], f = Math.min(1, n - i);
+    bctx.beginPath(); bctx.moveTo(...P[a]);
+    bctx.lineTo(P[a][0] + (P[b][0] - P[a][0]) * f, P[a][1] + (P[b][1] - P[a][1]) * f); bctx.stroke();
+  }
+  for (const [x, y] of P) {
+    bctx.globalAlpha = .25 * c.alpha; bctx.fillStyle = tok("--butter");
+    bctx.beginPath(); bctx.arc(x, y, 7, 0, 6.28); bctx.fill();
+    bctx.globalAlpha = c.alpha; bctx.fillStyle = tok("--ink");
+    bctx.beginPath(); bctx.arc(x, y, 2.4, 0, 6.28); bctx.fill();
+  }
+  bctx.globalAlpha = 1;
+}
+let gazeTimer = null, gazeStart = 0;
+function gaze() {
+  if (document.body.classList.contains("gazing")) return;
+  clearInterval(showTimer);
+  gazeStart = performance.now();
+  $("#gazeTitle").textContent = "Gökyüzü bile bugün adını yazıyor";
+  $("#gazeSub").textContent = "Hangi yöne gidersen git, yolun hep aydınlık olsun.";
+  document.body.classList.add("gazing");
+  cons = buildConstellation();
+  if (reduced) { cons.start -= 10000; drawStars(performance.now()); }
+  sfx.chime();
+  gazeTimer = setTimeout(endGaze, 13000);
+}
+function endGaze() {
+  clearTimeout(gazeTimer);
+  document.body.classList.remove("gazing");
+  if (cons) cons.fading = true;
+  if (reduced) { cons = null; drawStars(0); }
+}
+$("#gaze").addEventListener("click", gaze);
+document.addEventListener("click", () => {
+  if (document.body.classList.contains("gazing") && performance.now() - gazeStart > 3000) endGaze();
+});
+
 $("#restart").addEventListener("click", () => {
   clearInterval(showTimer);
   resetGift(); buildCandles(); buildBalloons(); resetLetter();
@@ -991,7 +1166,11 @@ $("#moon").addEventListener("click", () => {
 
 /* Başlat */
 resize();
-addEventListener("resize", () => { resize(); if (current === 3 && !scratchDone) initScratch(); });
+addEventListener("resize", () => {
+  resize();
+  if (current === 3 && !scratchDone) initScratch();
+  if (cons && !cons.fading) { const st = cons.start; cons = buildConstellation(); cons.start = st; }
+});
 buildCandles(); buildBalloons();
 go(0);
 if (!reduced) requestAnimationFrame(bgLoop);
