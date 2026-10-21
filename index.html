@@ -912,7 +912,17 @@ function setSound(on) {
     if (!musicTimer || musicPending) { musicPending = false; playMelody(); }
   } else actx.suspend();
 }
-soundBtn.addEventListener("click", () => setSound(!soundOn));
+let userToggled = false;
+soundBtn.addEventListener("click", () => { userToggled = true; setSound(!soundOn); });
+// Tarayıcılar sesi ilk dokunuştan önce engeller; müzik ilk dokunuşta ya da tuşta kendiliğinden başlar
+const autoEvents = ["click", "touchend", "keydown"];
+function autoStart(e) {
+  if (e.target && e.target.closest && e.target.closest("#sound")) return;
+  autoEvents.forEach(ev => removeEventListener(ev, autoStart, true));
+  if (!soundOn && !userToggled) setSound(true);
+}
+autoEvents.forEach(ev => addEventListener(ev, autoStart, true));
+
 const sfx = {
   ok() { return actx && soundOn; },
   pop() {
@@ -1030,7 +1040,7 @@ const gift = $("#gift");
 const giftLines = ["Hmm, sanki bir şey kıpırdadı…", "Biraz daha! Neredeyse açılıyor", ""];
 gift.addEventListener("click", () => {
   if (giftClicks >= 3) return;
-  if (giftClicks === 0 && !soundOn) setSound(true);
+  if (giftClicks === 0 && !soundOn && !userToggled) setSound(true);
   giftClicks++;
   gift.classList.remove("wobble", "wobble2"); void gift.offsetWidth;
   if (giftClicks < 3) {
