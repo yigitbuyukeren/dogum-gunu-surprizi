@@ -232,6 +232,12 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
   content: ""; position: absolute; left: 10%; right: 10%; bottom: 16px; height: 8px;
   background: radial-gradient(circle, var(--butter) 3px, transparent 4px) 0 0 / 22px 8px repeat-x;
 }
+.cake.many .candles { gap: 6px; }
+.cake.many .candle { width: 9px; height: 48px; }
+.cake.many .flame { width: 12px; height: 21px; margin-left: -6px; }
+.cake.many .t3 { width: 216px; }
+.cake.many .t2 { width: min(262px, 80vw); }
+.cake.many .t1 { width: min(310px, 88vw); }
 .plate { width: min(330px, 92vw); height: 14px; border-radius: 50%; background: var(--muted); opacity: .5; margin-top: -4px; }
 .counter { font: 700 14px/1 var(--body); color: var(--butter); letter-spacing: .08em; text-transform: uppercase; }
 
@@ -465,7 +471,7 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 /* ====== BURAYI KİŞİSELLEŞTİR ====== */
 const CONFIG = {
   name: "Doğum günü kızı",
-  candles: 5,
+  candles: 14,
   reasons: [
     "Gülüşün bulunduğu her yeri aydınlatıyor.",
     "Herkesi güldürmenin bir yolunu buluyorsun.",
@@ -774,6 +780,7 @@ let lit = 0;
 function buildCandles() {
   const box = $("#candles"); box.innerHTML = "";
   lit = CONFIG.candles;
+  $(".cake").classList.toggle("many", CONFIG.candles > 8);
   for (let i = 0; i < CONFIG.candles; i++) {
     const c = document.createElement("button");
     c.className = "candle"; c.setAttribute("aria-label", `Mum ${i + 1}, üfle`);
