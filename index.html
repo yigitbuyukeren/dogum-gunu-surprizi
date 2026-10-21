@@ -9,7 +9,7 @@ body { margin: 0; }
 img { max-width: 100%; }
 [hidden] { display: none !important; }
 </style>
-<title>İyi ki Doğdun Sevgilim</title>
+<title>İyi ki Doğdun</title>
 <meta name="x-viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -420,7 +420,7 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
     <h2>Altında bir hediye kuponu var</h2>
     <div class="scratch" id="scratch">
       <div class="prize">
-        <small>Hediye kuponu · geçerlilik: sonsuza kadar</small>
+        <small>Hediye kuponu · geçerlilik: sen ne zaman istersen</small>
         <strong id="couponTitle"></strong>
         <p id="couponText"></p>
       </div>
@@ -464,32 +464,34 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 <script>
 /* ====== BURAYI KİŞİSELLEŞTİR ====== */
 const CONFIG = {
-  name: "Sevgilim",
+  name: "Doğum günü kızı",
   candles: 5,
   reasons: [
-    "Gülüşün en kötü günümü bile düzeltiyor.",
-    "En saçma şakalarıma bile gerçekten gülüyorsun.",
-    "Yanındayken zaman çok hızlı geçiyor.",
-    "Kalbin çok güzel, herkese iyi davranıyorsun.",
-    "Senden gelen ilk mesaj günümün en güzel anı.",
-    "Bana kendimi evimde gibi hissettiriyorsun.",
+    "Gülüşün bulunduğu her yeri aydınlatıyor.",
+    "Herkesi güldürmenin bir yolunu buluyorsun.",
+    "Kalbin çok güzel, insanlara hep iyi davranıyorsun.",
+    "Sandığından çok daha güçlü birisin.",
     "Hayallerini anlatırken gözlerin parlıyor.",
+    "Seninle konuşmak günümün en güzel kısmı.",
+    "Seni tanımış olmak hayatımdaki en güzel şanslardan biri.",
     "Sen sensin. Bu yeter de artar bile."
   ],
   coupon: {
-    title: "Sınırsız Sarılma Kuponu",
-    text: "Bu kuponu gösterdiğin her an, hiçbir şey sormadan sarılma hakkın var. Üstüne bir de istediğin yemeğe götürülme hakkı."
+    title: "Bir Kahve Kuponu",
+    text: "Ne zaman istersen bir kahve benden, sohbeti de dahil. Kullanmak için sadece bu kuponu göstermen yeterli."
   },
   letter: null, // null bırakırsan aşağıdaki varsayılan mektup kullanılır
-  signature: "Seni çok seven"
+  signature: "Sevgiyle"
 };
 CONFIG.letter = CONFIG.letter || `${CONFIG.name},
 
-Bugün senin günün ve bu sayfayı sadece seni gülümsetmek için yaptım. Mumları söndürdün, balonları patlattın, kuponu kazıdın. Ama asıl sürpriz şu: Hayatıma girdiğin günden beri her şey daha renkli.
+Bugün senin doğum günün ve bunu sessizce geçirmek istemedim. Bu küçük sayfayı seni biraz gülümsetebilmek için hazırladım.
 
-Yeni yaşında bütün dileklerin gerçek olsun. Kahkahalı günlerde de, zor günlerde de hep yanındayım.
+Seni tanıdığım için çok mutluyum. Hayatımda olman benim için çok değerli.
 
-İyi ki doğdun, iyi ki varsın.`;
+Yeni yaşın sana huzur, kahkaha ve hak ettiğin bütün güzellikleri getirsin.
+
+İyi ki doğdun.`;
 /* ================================== */
 
 const $ = s => document.querySelector(s);
@@ -976,7 +978,7 @@ $("#moon").addEventListener("click", () => {
   else {
     moonTaps = 0;
     heartRain(150); sfx.chime();
-    toast("Seni aya kadar, sonra geri dönüp bir daha seviyorum");
+    toast("Gizli sürprizi buldun. Ay bile bugün senin için parlıyor");
   }
 });
 
