@@ -70,6 +70,7 @@ canvas.layer { position: fixed; inset: 0; pointer-events: none; }
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   box-sizing: border-box;
+  overflow-x: clip;
 }
 .scene {
   display: none;
@@ -107,7 +108,8 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 /* Üst kontrol çubuğu */
 .dots {
   position: fixed; z-index: 60; left: 50%; transform: translateX(-50%);
-  top: calc(22px + env(safe-area-inset-top, 0px));
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  pointer-events: none;
   display: flex; gap: 8px;
 }
 .dots span { width: 8px; height: 8px; border-radius: 99px; background: var(--muted); opacity: .35; transition: all .4s; }
@@ -123,7 +125,7 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 }
 .sound[aria-pressed="true"] { background: var(--pink); color: var(--night); border-color: var(--pink); }
 .moon {
-  position: fixed; z-index: 3;
+  position: absolute; z-index: 3;
   top: calc(8px + env(safe-area-inset-top, 0px));
   left: max(14px, env(safe-area-inset-left, 0px));
   width: 46px; height: 46px; border-radius: 50%; border: 0; cursor: pointer; padding: 0;
@@ -143,7 +145,7 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
   position: fixed; z-index: 70; left: 50%;
   bottom: calc(22px + env(safe-area-inset-bottom, 0px));
   transform: translate(-50%, calc(100% + 60px)); opacity: 0; visibility: hidden;
-  max-width: calc(100% - 32px); box-sizing: border-box;
+  width: max-content; max-width: min(420px, calc(100vw - 32px)); box-sizing: border-box;
   background: var(--paper); color: var(--paper-ink);
   font: 600 15px/1.35 var(--body); text-align: center;
   padding: 13px 20px; border-radius: 16px;
@@ -155,7 +157,7 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 /* 1 — Hediye kutusu */
 .gift-wrap { position: relative; width: 220px; height: 220px; display: grid; place-items: end center; }
 .rays {
-  position: absolute; inset: -60px; border-radius: 50%; opacity: 0;
+  position: absolute; inset: -40px; border-radius: 50%; opacity: 0;
   background: repeating-conic-gradient(from 0deg, rgba(255, 209, 102, .35) 0 10deg, transparent 10deg 24deg);
   mask-image: radial-gradient(circle, #000 20%, transparent 68%);
   -webkit-mask-image: radial-gradient(circle, #000 20%, transparent 68%);
@@ -957,7 +959,15 @@ function toast(msg, ms = 3200) {
   clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove("show"), ms);
 }
 const center = el => { const r = el.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
-function show(el) { el.hidden = false; el.classList.remove("pop-in"); void el.offsetWidth; el.classList.add("pop-in"); }
+function show(el) {
+  el.hidden = false; el.classList.remove("pop-in"); void el.offsetWidth; el.classList.add("pop-in");
+  // Yeni çıkan şey ekranın altında kaldıysa görünür hale kaydır
+  requestAnimationFrame(() => {
+    const r = el.getBoundingClientRect();
+    if (r.bottom > innerHeight - 40) scrollBy({ top: Math.min(r.bottom - innerHeight + 70, r.top - 70), behavior: reduced ? "auto" : "smooth" });
+  });
+}
+
 
 const scenes = $$(".scene");
 const dotsEl = $("#dots");
@@ -985,6 +995,7 @@ const gateMsgs = ["Hmm, bu değil. Bir daha dene.", "İpucu: Kışın.", "Son ip
   if (inp === gDay && inp.value.length === 2) gMonth.focus();
 }));
 gMonth.addEventListener("keydown", e => { if (e.key === "Backspace" && !gMonth.value) gDay.focus(); });
+[gDay, gMonth].forEach(inp => inp.addEventListener("focus", () => inp.select()));
 function unlockGate() {
   $("#gate").classList.add("ok"); $("#lock").classList.add("unlocked");
   $("#gateHint").textContent = `Hoş geldin, ${CONFIG.name}`;
@@ -1003,7 +1014,10 @@ $("#gateForm").addEventListener("submit", e => {
     $("#gateHint").textContent = "Cevap 14 Şubat. Yine de içeri alıyorum, bugün senin günün.";
     gDay.value = String(CONFIG.birth.day).padStart(2, "0"); gMonth.value = String(CONFIG.birth.month).padStart(2, "0");
     setTimeout(unlockGate, 1400);
-  } else $("#gateHint").textContent = gateMsgs[gateTries - 1];
+  } else {
+    $("#gateHint").textContent = gateMsgs[gateTries - 1];
+    gDay.value = ""; gMonth.value = ""; gDay.focus();
+  }
 });
 
 /* Dünyadaki zamanın */
@@ -1252,6 +1266,11 @@ function typeLetter() {
   const step = () => {
     el.textContent = txt.slice(0, ++i);
     if (i >= txt.length) return finish();
+    if (i % 24 === 0) {
+      const b = el.getBoundingClientRect().bottom;
+      if (b > innerHeight - 90) scrollBy({ top: b - innerHeight + 140, behavior: "smooth" });
+    }
+
     const ch = txt[i - 1];
     typeTimer = setTimeout(step, ch === "\n" ? 260 : ".,!".includes(ch) ? 180 : 32);
   };
