@@ -13,7 +13,7 @@ img { max-width: 100%; }
 <meta name="x-viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Caveat:wght@500;700&family=Figtree:wght@400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,900,100&family=Caveat:wght@500;700&family=Figtree:wght@400;600;700&display=swap">
 <style>
 /* Layout: tek ekranlık sahneler; gece gökyüzü üstünde sırayla açılan sürprizler, alttan üste tek odak */
 :root {
@@ -42,7 +42,7 @@ img { max-width: 100%; }
   --dawn-top: #2a2064;
   --dawn-mid: #a5487a;
   --dawn-low: #f08a63;
-  --display: "Caprasimo", "Cooper Black", Georgia, serif;
+  --display: "Fraunces", "Cooper Black", Georgia, serif;
   --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --hand: "Caveat", "Bradley Hand", "Comic Sans MS", cursive;
   color-scheme: dark;
@@ -512,6 +512,11 @@ body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
 @keyframes wave { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
 .finale-name { font: 700 clamp(30px, 7vw, 44px)/1 var(--hand); color: var(--ink); margin: 0; }
 .row { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+/* Başlık yazı tipi: kalın ve yumuşak (Türkçe harflerin hepsi var) */
+h1, h2, .big-num, .gate input, .gate .sep, .prize strong, .ow-front strong {
+  font-weight: 900; font-variation-settings: "SOFT" 100;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .2s !important; }
@@ -1191,7 +1196,7 @@ function initScratch() {
   }
   sctx.fillStyle = tok("--paper-ink");
   sctx.textAlign = "center"; sctx.textBaseline = "middle";
-  sctx.font = `400 ${Math.min(34, r.width / 9)}px ${tok("--display")}`;
+  sctx.font = `900 ${Math.min(34, r.width / 9)}px ${tok("--display")}`;
   sctx.fillText("Kazı beni", r.width / 2, r.height / 2 - 8);
   sctx.font = `600 14px ${tok("--body")}`;
   sctx.fillText("altında senin için bir şey var", r.width / 2, r.height / 2 + 24);
