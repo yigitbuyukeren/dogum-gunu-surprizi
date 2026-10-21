@@ -684,9 +684,10 @@ h1, h2, .big-num, .gate input, .gate .sep, .prize strong, .ow-front strong {
 <script>
 /* ====== BURAYI KİŞİSELLEŞTİR ====== */
 const CONFIG = {
-  name: "Ada",
-  birth: { day: 14, month: 2, year: 2012 },
-  age: 14,
+  name: "Ada",                                // Adı (yıldız harfleri için Türkçe harfler desteklenir)
+  birth: { day: 14, month: 2, year: 2012 },   // Doğum tarihi: giriş sorusu, sayaç ve ay evresi buna göre hesaplanır
+  age: null,                                  // Boş bırakırsan bu yılki yaşı kendisi hesaplar
+  star: { name: "Wolf 1061", ly: 14 },        // Yaşına yakın uzaklıkta (ışık yılı) bir yıldız seç
   openWhen: [
     { label: "Canın sıkıldığında", color: "--sky",
       text: "En kötü gün bile sadece 24 saat sürüyor. Yarın yeni bir sayfa. Şimdilik derin bir nefes al, sonra bu sayfaya dönüp biraz konfeti patlat." },
@@ -695,8 +696,7 @@ const CONFIG = {
     { label: "Kendine inanmadığında", color: "--mint",
       text: "Sen sandığından çok daha güçlü, akıllı ve değerlisin. Bunu sana söyleyen ilk kişi ben değilim, son kişi de ben olmayacağım." }
   ],
-
-  candles: 14,
+  candles: null,                              // Boş bırakırsan yaş kadar mum olur
   reasons: [
     "Gülüşün bulunduğu her yeri aydınlatıyor.",
     "Herkesi güldürmenin bir yolunu buluyorsun.",
@@ -714,6 +714,8 @@ const CONFIG = {
   letter: null, // null bırakırsan aşağıdaki varsayılan mektup kullanılır
   signature: "Sevgiyle"
 };
+CONFIG.age = CONFIG.age || (new Date().getFullYear() - CONFIG.birth.year);
+CONFIG.candles = CONFIG.candles || CONFIG.age;
 CONFIG.letter = CONFIG.letter || `${CONFIG.name},
 
 Bu şişe sana denizden geldi. İçinde sadece sana yazılmış birkaç satır var.
@@ -929,7 +931,6 @@ function autoStart(e) {
   if (!soundOn && !userToggled) setSound(true);
 }
 autoEvents.forEach(ev => addEventListener(ev, autoStart, true));
-
 const sfx = {
   ok() { return actx && soundOn; },
   pop() {
@@ -973,7 +974,6 @@ function show(el) {
   });
 }
 
-
 const scenes = $$(".scene");
 const dotsEl = $("#dots");
 scenes.forEach(() => dotsEl.appendChild(document.createElement("span")));
@@ -994,7 +994,9 @@ document.addEventListener("click", e => {
 /* 0 — Giriş kapısı */
 let gateTries = 0;
 const gDay = $("#gDay"), gMonth = $("#gMonth");
-const gateMsgs = ["Hmm, bu değil. Bir daha dene.", "İpucu: Kışın.", "Son ipucu: Şubat ayında."];
+const MONTHS = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+const SEASON = ["Kışın", "Kışın", "İlkbaharda", "İlkbaharda", "İlkbaharda", "Yazın", "Yazın", "Yazın", "Sonbaharda", "Sonbaharda", "Sonbaharda", "Kışın"][CONFIG.birth.month - 1];
+const gateMsgs = ["Hmm, bu değil. Bir daha dene.", `İpucu: ${SEASON}.`, `Son ipucu: ${MONTHS[CONFIG.birth.month - 1]} ayında.`];
 [gDay, gMonth].forEach(inp => inp.addEventListener("input", () => {
   inp.value = inp.value.replace(/\D/g, "").slice(0, 2);
   if (inp === gDay && inp.value.length === 2) gMonth.focus();
@@ -1016,7 +1018,7 @@ $("#gateForm").addEventListener("submit", e => {
   gateTries++;
   const g = $("#gate"); g.classList.remove("shake"); void g.offsetWidth; g.classList.add("shake");
   if (gateTries > gateMsgs.length) {
-    $("#gateHint").textContent = "Cevap 14 Şubat. Yine de içeri alıyorum, bugün senin günün.";
+    $("#gateHint").textContent = `Cevap ${CONFIG.birth.day} ${MONTHS[CONFIG.birth.month - 1]}. Yine de içeri alıyorum, bugün senin günün.`;
     gDay.value = String(CONFIG.birth.day).padStart(2, "0"); gMonth.value = String(CONFIG.birth.month).padStart(2, "0");
     setTimeout(unlockGate, 1400);
   } else {
@@ -1275,7 +1277,6 @@ function typeLetter() {
       const b = el.getBoundingClientRect().bottom;
       if (b > innerHeight - 90) scrollBy({ top: b - innerHeight + 140, behavior: "smooth" });
     }
-
     const ch = txt[i - 1];
     typeTimer = setTimeout(step, ch === "\n" ? 260 : ".,!".includes(ch) ? 180 : 32);
   };
@@ -1367,11 +1368,33 @@ $("#finaleLead").textContent = `${CONFIG.age}. yaşın kutlu olsun. Gökyüzüne
 /* Yıldızlardan isim */
 const LETTERS = {
   A: [[[0, 1], [.31, 0], [.62, 1]], [[.14, .58], [.48, .58]]],
+  B: [[[0, 1], [0, 0], [.45, 0], [.55, .12], [.55, .36], [.42, .48], [0, .48]], [[.42, .48], [.6, .6], [.6, .86], [.48, 1], [0, 1]]],
+  C: [[[.62, .1], [.45, 0], [.15, 0], [0, .2], [0, .8], [.15, 1], [.45, 1], [.62, .9]]],
+  Ç: [[[.62, .1], [.45, 0], [.15, 0], [0, .2], [0, .8], [.15, 1], [.45, 1], [.62, .9]], [[.31, 1.08], [.36, 1.18], [.26, 1.26]]],
   D: [[[0, 0], [0, 1], [.42, .92], [.62, .5], [.42, .08], [0, 0]]],
   E: [[[.6, 0], [0, 0], [0, 1], [.6, 1]], [[0, .5], [.45, .5]]],
-  İ: [[[.3, -.16]], [[.3, .12], [.3, 1]]],
+  F: [[[.6, 0], [0, 0], [0, 1]], [[0, .5], [.45, .5]]],
+  G: [[[.62, .1], [.45, 0], [.15, 0], [0, .2], [0, .8], [.15, 1], [.5, 1], [.62, .85], [.62, .55], [.35, .55]]],
+  Ğ: [[[.62, .1], [.45, 0], [.15, 0], [0, .2], [0, .8], [.15, 1], [.5, 1], [.62, .85], [.62, .55], [.35, .55]], [[.18, -.22], [.31, -.12], [.44, -.22]]],
+  H: [[[0, 0], [0, 1]], [[.62, 0], [.62, 1]], [[0, .5], [.62, .5]]],
   I: [[[.3, 0], [.3, 1]]],
+  İ: [[[.3, -.16]], [[.3, .12], [.3, 1]]],
+  J: [[[.5, 0], [.5, .8], [.35, 1], [.12, 1], [0, .85]]],
+  K: [[[0, 0], [0, 1]], [[.6, 0], [0, .55], [.62, 1]]],
+  L: [[[0, 0], [0, 1], [.58, 1]]],
+  M: [[[0, 1], [0, 0], [.31, .5], [.62, 0], [.62, 1]]],
   N: [[[0, 1], [0, 0], [.62, 1], [.62, 0]]],
+  O: [[[.15, 0], [.47, 0], [.62, .2], [.62, .8], [.47, 1], [.15, 1], [0, .8], [0, .2], [.15, 0]]],
+  Ö: [[[.15, 0], [.47, 0], [.62, .2], [.62, .8], [.47, 1], [.15, 1], [0, .8], [0, .2], [.15, 0]], [[.18, -.18]], [[.44, -.18]]],
+  P: [[[0, 1], [0, 0], [.45, 0], [.6, .14], [.6, .4], [.45, .52], [0, .52]]],
+  R: [[[0, 1], [0, 0], [.45, 0], [.6, .14], [.6, .4], [.45, .52], [0, .52]], [[.3, .52], [.62, 1]]],
+  S: [[[.6, .1], [.45, 0], [.15, 0], [0, .15], [0, .38], [.15, .5], [.47, .5], [.62, .62], [.62, .85], [.47, 1], [.15, 1], [0, .9]]],
+  Ş: [[[.6, .1], [.45, 0], [.15, 0], [0, .15], [0, .38], [.15, .5], [.47, .5], [.62, .62], [.62, .85], [.47, 1], [.15, 1], [0, .9]], [[.31, 1.08], [.36, 1.18], [.26, 1.26]]],
+  T: [[[0, 0], [.62, 0]], [[.31, 0], [.31, 1]]],
+  U: [[[0, 0], [0, .8], [.15, 1], [.47, 1], [.62, .8], [.62, 0]]],
+  Ü: [[[0, 0], [0, .8], [.15, 1], [.47, 1], [.62, .8], [.62, 0]], [[.18, -.18]], [[.44, -.18]]],
+  V: [[[0, 0], [.31, 1], [.62, 0]]],
+  Y: [[[0, 0], [.31, .5], [.62, 0]], [[.31, .5], [.31, 1]]],
   Z: [[[0, 0], [.62, 0], [0, 1], [.62, 1]]]
 };
 function buildConstellation() {
@@ -1418,7 +1441,7 @@ function drawConstellation(t) {
     bctx.beginPath(); bctx.arc(sp.x, sp.y, 9, 0, 6.28); bctx.fill();
     bctx.globalAlpha = c.alpha * k; bctx.fillStyle = tok("--muted");
     bctx.font = `600 12px ${tok("--body")}`; bctx.textAlign = sp.x > W / 2 ? "right" : "left";
-    bctx.fillText("Wolf 1061 · 14 ışık yılı", sp.x + (sp.x > W / 2 ? -26 : 26), sp.y + 4);
+    bctx.fillText(`${CONFIG.star.name} · ${CONFIG.star.ly} ışık yılı`, sp.x + (sp.x > W / 2 ? -26 : 26), sp.y + 4);
   }
   for (const [x, y] of P) {
     bctx.globalAlpha = .25 * c.alpha; bctx.fillStyle = tok("--butter");
@@ -1449,8 +1472,8 @@ function starPhase() {
   if (cons) cons.special = { x: W * .8, y: Math.max(70, H * .12), t0: performance.now() };
   if (reduced) drawStars(performance.now());
   starTimer = setTimeout(() => {
-    $("#gazeTitle").textContent = "14 ışık yılı uzaktan bir selam";
-    $("#gazeSub").textContent = "Wolf 1061 adında bir yıldız bize yaklaşık 14 ışık yılı uzakta. Sen doğduğun gün ondan yola çıkan ışık, şimdi Dünya'ya ulaşıyor. Gözle görünmüyor ama orada.";
+    $("#gazeTitle").textContent = `${CONFIG.star.ly} ışık yılı uzaktan bir selam`;
+    $("#gazeSub").textContent = `${CONFIG.star.name} adında bir yıldız bize yaklaşık ${CONFIG.star.ly} ışık yılı uzakta. Sen doğduğun gün ondan yola çıkan ışık, şimdi Dünya'ya ulaşıyor.`;
     msg.style.opacity = "1";
     sfx.chime();
   }, 900);
@@ -1459,7 +1482,6 @@ function starPhase() {
 function endGaze() {
   clearTimeout(gazeTimer); clearTimeout(starTimer);
   const msg = $("#gazeMsg"); msg.style.opacity = ""; msg.style.transition = "";
-
   document.body.classList.remove("gazing");
   if (cons) cons.fading = true;
   if (reduced) { cons = null; drawStars(0); }
