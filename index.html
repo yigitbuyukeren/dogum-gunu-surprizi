@@ -36,6 +36,12 @@ img { max-width: 100%; }
   --sea-3: #5d9be8;
   --glass: rgba(124, 231, 201, .26);
   --cork: #c38b5a;
+  --sand: #e8c592;
+  --foam: #e9f4ff;
+  --leaf: #5fbf8f;
+  --dawn-top: #2a2064;
+  --dawn-mid: #a5487a;
+  --dawn-low: #f08a63;
   --display: "Caprasimo", "Cooper Black", Georgia, serif;
   --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --hand: "Caveat", "Bradley Hand", "Comic Sans MS", cursive;
@@ -246,30 +252,39 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 .plate { width: min(330px, 92vw); height: 14px; border-radius: 50%; background: var(--muted); opacity: .5; margin-top: -4px; }
 .counter { font: 700 14px/1 var(--body); color: var(--butter); letter-spacing: .08em; text-transform: uppercase; }
 
-/* 3 — Balonlar */
-.sky { display: flex; flex-wrap: wrap; justify-content: center; gap: 46px 26px; max-width: 520px; padding-bottom: 46px; }
-.balloon {
+/* 3 — Deniz kabukları */
+.beach {
+  width: 100%; max-width: 520px; box-sizing: border-box;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 30px 24px;
+  padding: 72px 18px 34px; border-radius: 24px;
+  background: linear-gradient(180deg, var(--sea-2) 0 34px, var(--foam) 34px 40px, var(--sand) 40px);
+  box-shadow: inset 0 -10px 0 rgba(58, 35, 87, .08);
+}
+.shell-wrap { position: relative; width: 66px; height: 58px; }
+.pearl {
+  position: absolute; left: 50%; bottom: 4px; width: 20px; height: 20px; margin-left: -10px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff 0 20%, var(--cream) 55%, #e6d3f0);
+  box-shadow: 0 0 14px rgba(255, 255, 255, .85);
+  opacity: 0; transform: scale(.3);
+  transition: transform .6s cubic-bezier(.2,1.6,.4,1) .25s, opacity .3s .2s;
+}
+.shell {
   --c: var(--pink);
-  position: relative; width: 66px; height: 82px; border: 0; padding: 0; cursor: pointer;
-  border-radius: 50% 50% 48% 48% / 56% 56% 44% 44%;
-  background: radial-gradient(circle at 32% 27%, rgba(255, 255, 255, .6), transparent 26%), var(--c);
-  box-shadow: inset -8px -10px 0 rgba(0, 0, 0, .1);
-  animation: bob 3.2s ease-in-out infinite; animation-delay: var(--d, 0s);
-  transition: transform .2s;
+  position: absolute; inset: 0; border: 0; padding: 0; cursor: pointer;
+  border-radius: 50% 50% 18% 18% / 85% 85% 20% 20%;
+  background: repeating-conic-gradient(from -80deg at 50% 100%, var(--c) 0 10deg, color-mix(in srgb, var(--c) 72%, #3a2357) 10deg 13deg);
+  box-shadow: 0 5px 0 rgba(58, 35, 87, .18);
+  transform-origin: 50% 100%;
+  transition: transform .8s cubic-bezier(.3,1.4,.5,1);
+  animation: wiggle 4.5s ease-in-out infinite; animation-delay: var(--d, 0s);
 }
-.balloon::before {
-  content: ""; position: absolute; left: 50%; bottom: -7px; margin-left: -6px;
-  border: 6px solid transparent; border-bottom: 8px solid var(--c); border-top: 0;
-  transform: rotate(180deg);
+.shell::after {
+  content: ""; position: absolute; left: 50%; bottom: -6px; width: 22px; height: 10px; margin-left: -11px; border-radius: 4px;
+  background: color-mix(in srgb, var(--c) 80%, #3a2357);
 }
-.balloon::after {
-  content: ""; position: absolute; left: 50%; top: calc(100% + 6px); width: 2px; height: 42px;
-  background: linear-gradient(var(--muted), transparent);
-}
-.balloon:hover { transform: scale(1.08); }
-@keyframes bob { 0%, 100% { translate: 0 0; rotate: -3deg; } 50% { translate: 0 -12px; rotate: 3deg; } }
-.balloon.popped { animation: popB .25s ease-out forwards; pointer-events: none; }
-@keyframes popB { 60% { transform: scale(1.35); opacity: .9; } 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes wiggle { 0%, 88%, 100% { rotate: 0deg; } 92% { rotate: -7deg; } 96% { rotate: 6deg; } }
+.shell-wrap.open .shell { animation: none; transform: translate(14px, -30px) rotate(28deg) scale(.92); pointer-events: none; }
+.shell-wrap.open .pearl { opacity: 1; transform: scale(1); }
 .notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 460px; }
 .notes li {
   display: flex; gap: 12px; align-items: flex-start; text-align: left;
@@ -360,6 +375,84 @@ button:focus-visible { outline: 3px solid var(--mint); outline-offset: 4px; }
 .letter .sign { font: 700 26px/1.2 var(--hand); color: var(--pink-deep); text-align: right; margin: 10px 0 0; opacity: 0; transition: opacity .8s; }
 .letter.done .sign { opacity: 1; }
 
+/* 0 — Giriş kapısı */
+.lock { position: relative; width: 56px; height: 46px; margin-top: 30px; border-radius: 10px; background: var(--butter); }
+.lock::before {
+  content: ""; position: absolute; left: 50%; top: -28px; width: 34px; height: 36px; margin-left: -17px;
+  box-sizing: border-box; border: 6px solid var(--butter); border-bottom: 0; border-radius: 18px 18px 0 0;
+  transform-origin: 90% 100%; transition: transform .5s cubic-bezier(.3,1.5,.5,1);
+}
+.lock::after { content: ""; position: absolute; left: 50%; top: 14px; width: 10px; height: 16px; margin-left: -5px; border-radius: 5px; background: var(--night); }
+.lock.unlocked::before { transform: translate(-6px, -10px) rotate(-28deg); }
+.gate-form { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+.gate { display: flex; align-items: center; gap: 10px; }
+.gate input {
+  width: 76px; box-sizing: border-box; padding: 14px 0; text-align: center;
+  font: 400 34px/1 var(--display); color: var(--ink);
+  background: rgba(255, 255, 255, .06); border: 2px solid var(--muted); border-radius: 16px;
+  transition: border-color .3s, box-shadow .3s;
+}
+.gate input::placeholder { color: var(--muted); opacity: .45; }
+.gate input:focus { outline: none; border-color: var(--butter); }
+.gate .sep { font: 400 34px/1 var(--display); color: var(--muted); }
+.gate.shake { animation: shake .45s; }
+@keyframes shake { 20% { transform: translateX(-10px); } 40% { transform: translateX(9px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(4px); } }
+.gate.ok input { border-color: var(--mint); box-shadow: 0 0 24px rgba(124, 231, 201, .5); }
+
+/* Dünyadaki zamanın */
+.lifetime { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.big-num { font: 400 clamp(34px, 9vw, 56px)/1 var(--display); color: var(--butter); font-variant-numeric: tabular-nums; }
+.unit { font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+/* Ne zaman ihtiyacın olursa aç */
+.ow-list { display: flex; flex-direction: column; gap: 14px; width: 100%; max-width: 420px; }
+.ow { display: block; width: 100%; min-height: 196px; border: 0; padding: 0; background: none; cursor: pointer; perspective: 900px; font: inherit; color: inherit; text-align: left; }
+.ow-inner { position: relative; display: block; min-height: 196px; transform-style: preserve-3d; transition: transform .8s cubic-bezier(.3,1.2,.5,1); }
+.ow.open .ow-inner { transform: rotateY(180deg); }
+.ow-face {
+  position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; gap: 6px;
+  padding: 18px 22px; box-sizing: border-box; border-radius: 16px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+}
+.ow-front { background: linear-gradient(160deg, rgba(255, 255, 255, .28), transparent 55%), var(--c); color: var(--night); overflow: hidden; }
+.ow-front::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 52%; clip-path: polygon(0 0, 100% 0, 50% 100%); background: rgba(58, 35, 87, .1); }
+.ow-front small { font: 700 11px/1 var(--body); letter-spacing: .16em; text-transform: uppercase; position: relative; }
+.ow-front strong { font: 400 24px/1.1 var(--display); position: relative; }
+.ow-back { background: var(--paper); color: var(--paper-ink); transform: rotateY(180deg); font: 500 20px/1.3 var(--hand); }
+
+/* Gün doğumu ve buket */
+#dawn {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; opacity: 0;
+  background: linear-gradient(180deg, var(--dawn-top) 0%, var(--dawn-mid) 55%, var(--dawn-low) 100%);
+  transition: opacity 5s ease;
+}
+#dawn::after {
+  content: ""; position: absolute; left: 50%; bottom: -150px; width: 300px; height: 300px; margin-left: -150px; border-radius: 50%;
+  background: radial-gradient(circle, var(--cream) 0 28%, rgba(255, 209, 102, .6) 45%, transparent 70%);
+  transform: translateY(140px); transition: transform 7s cubic-bezier(.2,.7,.3,1) 1s;
+}
+body.dawn #dawn { opacity: .93; }
+body.dawn #dawn::after { transform: translateY(0); }
+.fin { display: flex; flex-direction: column; align-items: center; gap: 20px; width: 100%; }
+#finB { text-shadow: 0 2px 14px rgba(27, 16, 51, .5); }
+#finB .lead { color: var(--ink); }
+.bouquet { width: min(260px, 70vw); max-width: 100%; height: auto; overflow: visible; transform-origin: 50% 100%; animation: sway 5s ease-in-out 3.6s infinite; }
+@keyframes sway { 50% { transform: rotate(2deg); } }
+.bouquet .stem { fill: none; stroke: var(--leaf); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 220; stroke-dashoffset: 220; animation: draw 1.2s ease-out forwards; animation-delay: calc(.3s + var(--i) * .12s); }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.bouquet .leaf, .bouquet .dot, .bouquet .flower { transform-box: fill-box; transform-origin: center; transform: scale(0); }
+.bouquet .leaf { fill: var(--leaf); animation: grow .6s cubic-bezier(.2,1.6,.4,1) forwards; animation-delay: calc(1.1s + var(--i) * .15s); }
+.bouquet .dot { fill: var(--cream); animation: grow .4s ease-out forwards; animation-delay: calc(2.6s + var(--i) * .05s); }
+.bouquet .flower { animation: bloomF 1s cubic-bezier(.2,1.5,.4,1) forwards; animation-delay: calc(1.5s + var(--i) * .22s); }
+@keyframes grow { to { transform: scale(1); } }
+@keyframes bloomF { from { transform: scale(0) rotate(-90deg); } to { transform: scale(1) rotate(0deg); } }
+.bouquet .petal { fill: var(--c); }
+.bouquet .fc { fill: var(--cc, var(--butter)); }
+.bouquet .wrap { fill: var(--paper); animation: fadeUp .8s both; }
+.bouquet .fold { fill: none; stroke: rgba(58, 35, 87, .15); stroke-width: 1.5; }
+.bouquet .ribbon { fill: var(--pink-deep); }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } }
+
 /* Dilek feneri */
 .lantern-ask { display: flex; flex-direction: column; align-items: center; gap: 14px; width: 100%; max-width: 380px; }
 .wish-input {
@@ -427,6 +520,7 @@ body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
 <body>
 <canvas class="layer" id="bg" aria-hidden="true"></canvas>
 <canvas class="layer" id="fx" aria-hidden="true"></canvas>
+<div id="dawn" aria-hidden="true"></div>
 
 <button class="moon" id="moon" aria-label="Ay"></button>
 <div class="dots" id="dots" aria-hidden="true"></div>
@@ -435,8 +529,25 @@ body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
 <p class="gaze-msg" id="gazeMsg" aria-live="polite"><strong id="gazeTitle"></strong><span id="gazeSub"></span></p>
 
 <main class="stage">
+  <!-- 0 -->
+  <section class="scene on" id="s-gate">
+    <div class="lock" id="lock"></div>
+    <p class="eyebrow">Bu sayfa sadece bir kişi için</p>
+    <h1>Önce kim olduğunu kanıtla</h1>
+    <p class="lead">Doğum günün hangi gün?</p>
+    <form class="gate-form" id="gateForm" novalidate>
+      <div class="gate" id="gate">
+        <input id="gDay" inputmode="numeric" maxlength="2" placeholder="GG" autocomplete="off" aria-label="Gün">
+        <span class="sep">.</span>
+        <input id="gMonth" inputmode="numeric" maxlength="2" placeholder="AA" autocomplete="off" aria-label="Ay">
+      </div>
+      <button class="btn" type="submit">Kapıyı aç</button>
+    </form>
+    <p class="hint" id="gateHint"></p>
+  </section>
+
   <!-- 1 -->
-  <section class="scene on" data-scene="0">
+  <section class="scene" id="s-gift">
     <p class="eyebrow">Bugün senin günün</p>
     <h1 id="giftTitle">Sana küçük bir hediyem var</h1>
     <div class="gift-wrap" id="giftWrap">
@@ -449,6 +560,11 @@ body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
     <p class="hint" id="giftHint">Kutuya dokun</p>
     <div class="gift-reveal" id="giftReveal" hidden>
       <h2>İyi ki doğdun, <span class="nm"></span>!</h2>
+      <div class="lifetime">
+        <div class="big-num" id="lifeSec">0</div>
+        <div class="unit">saniyedir bu dünyadasın</div>
+      </div>
+      <p class="lead" id="lifeFacts"></p>
       <p class="lead">Bu sayfa senin için. İçinde birkaç sürpriz daha saklı.</p>
       <button class="btn" data-next>Sürprizlere başla</button>
     </div>
@@ -484,15 +600,15 @@ body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
 
   <!-- 3 -->
   <section class="scene" data-scene="2">
-    <p class="eyebrow">Balonların içinde senin hakkında gerçekler var</p>
-    <h2>Patlat ve oku</h2>
-    <div class="sky" id="sky"></div>
+    <p class="eyebrow">Kumsalda senin için bir şeyler var</p>
+    <h2>Her deniz kabuğunun içinde bir inci saklı</h2>
+    <div class="beach" id="beach"></div>
     <ul class="notes" id="notes" aria-live="polite"></ul>
-    <button class="btn" data-next id="balloonNext" hidden>Bir sürpriz daha</button>
+    <button class="btn" data-next id="shellNext" hidden>Bir sürpriz daha</button>
   </section>
 
   <!-- 4 -->
-  <section class="scene" data-scene="3">
+  <section class="scene" id="s-coupon">
     <p class="eyebrow">Kazı kazan</p>
     <h2>Altında küçük bir söz var</h2>
     <div class="scratch" id="scratch">
@@ -508,7 +624,7 @@ body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
   </section>
 
   <!-- 5 -->
-  <section class="scene" data-scene="4">
+  <section class="scene" id="s-bottle">
     <p class="eyebrow">Denizden sana bir şey geldi</p>
     <h2 id="envTitle">Bir şişe kıyıya vuruyor</h2>
     <div class="sea" id="sea">
@@ -525,17 +641,34 @@ body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
       <div class="text" id="letterText"></div>
       <p class="sign" id="letterSign"></p>
     </article>
-    <button class="btn" data-next id="letterNext" hidden>Son sürpriz</button>
+    <button class="btn" data-next id="letterNext" hidden>Bir şey daha var</button>
+  </section>
+
+  <!-- 6 -->
+  <section class="scene" id="s-openwhen">
+    <p class="eyebrow">Bunlar sende kalsın</p>
+    <h2>Ne zaman ihtiyacın olursa aç</h2>
+    <p class="lead">İstersen şimdi aç, istersen sonra gelip açarsın. Bu sayfa hep burada.</p>
+    <div class="ow-list" id="owList"></div>
+    <button class="btn" data-next id="owNext" hidden>Son sürpriz</button>
   </section>
 
   <!-- 6 -->
   <section class="scene" data-scene="5" id="finale">
-    <h1 class="finale-title" id="finaleTitle" aria-label="İyi ki doğdun"></h1>
-    <p class="finale-name nm"></p>
-    <p class="lead" id="finaleLead"></p>
-    <div class="row">
-      <button class="btn" id="gaze">Gökyüzüne bak</button>
-      <button class="btn ghost" id="hearts">Kalp yağmuru</button>
+    <div class="fin" id="finA">
+      <h1 class="finale-title" id="finaleTitle" aria-label="İyi ki doğdun"></h1>
+      <p class="finale-name nm"></p>
+      <p class="lead" id="finaleLead"></p>
+      <div class="row">
+        <button class="btn" id="gaze">Gökyüzüne bak</button>
+        <button class="btn ghost" id="hearts">Kalp yağmuru</button>
+      </div>
+    </div>
+    <div class="fin" id="finB" hidden>
+      <svg class="bouquet" id="bouquet" viewBox="0 0 240 260" aria-hidden="true"></svg>
+      <h2>Yeni yaşın, yeni bir sabah gibi olsun</h2>
+      <p class="lead">Bu çiçekler hiç solmaz. Ne zaman istersen gelip bakabilirsin.</p>
+      <p class="finale-name">İyi ki doğdun, <span class="nm"></span>.</p>
       <button class="btn ghost" id="restart">Baştan izle</button>
     </div>
   </section>
@@ -545,7 +678,17 @@ body.gazing .gaze-msg { opacity: 1; transition: opacity 1.4s 4.2s; }
 /* ====== BURAYI KİŞİSELLEŞTİR ====== */
 const CONFIG = {
   name: "Ada",
+  birth: { day: 14, month: 2, year: 2012 },
   age: 14,
+  openWhen: [
+    { label: "Canın sıkıldığında", color: "--sky",
+      text: "En kötü gün bile sadece 24 saat sürüyor. Yarın yeni bir sayfa. Şimdilik derin bir nefes al, sonra bu sayfaya dönüp biraz konfeti patlat." },
+    { label: "Gülmek istediğinde", color: "--butter",
+      text: "Düşün: Biri senin için mumlar, kabuklar, şişeler ve koca bir gökyüzü kodladı. Bu kadar uğraşan birinin hâli bile yeterince komik." },
+    { label: "Kendine inanmadığında", color: "--mint",
+      text: "Sen sandığından çok daha güçlü, akıllı ve değerlisin. Bunu sana söyleyen ilk kişi ben değilim, son kişi de ben olmayacağım." }
+  ],
+
   candles: 14,
   reasons: [
     "Gülüşün bulunduğu her yeri aydınlatıyor.",
@@ -815,11 +958,65 @@ function go(i) {
   scenes.forEach((s, k) => s.classList.toggle("on", k === i));
   [...dotsEl.children].forEach((d, k) => { d.classList.toggle("on", k === i); d.classList.toggle("done", k < i); });
   scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" });
-  enter[i] && enter[i]();
+  const id = scenes[i].id;
+  enter[id] && enter[id]();
 }
+const sceneId = () => scenes[current].id;
 document.addEventListener("click", e => {
   if (e.target.closest("[data-next]")) { sfx.chime(); go(current + 1); }
 });
+
+/* 0 — Giriş kapısı */
+let gateTries = 0;
+const gDay = $("#gDay"), gMonth = $("#gMonth");
+const gateMsgs = ["Hmm, bu değil. Bir daha dene.", "İpucu: Kışın.", "Son ipucu: Şubat ayında."];
+[gDay, gMonth].forEach(inp => inp.addEventListener("input", () => {
+  inp.value = inp.value.replace(/\D/g, "").slice(0, 2);
+  if (inp === gDay && inp.value.length === 2) gMonth.focus();
+}));
+gMonth.addEventListener("keydown", e => { if (e.key === "Backspace" && !gMonth.value) gDay.focus(); });
+function unlockGate() {
+  $("#gate").classList.add("ok"); $("#lock").classList.add("unlocked");
+  $("#gateHint").textContent = `Hoş geldin, ${CONFIG.name}`;
+  const [x, y] = center($("#lock")); sparks(x, y, tok("--butter"), 60, 5);
+  gDay.blur(); gMonth.blur();
+  setTimeout(() => go(1), 1100);
+}
+$("#gateForm").addEventListener("submit", e => {
+  e.preventDefault();
+  if ($("#gate").classList.contains("ok")) return;
+  const d = parseInt(gDay.value, 10), m = parseInt(gMonth.value, 10);
+  if (d === CONFIG.birth.day && m === CONFIG.birth.month) return unlockGate();
+  gateTries++;
+  const g = $("#gate"); g.classList.remove("shake"); void g.offsetWidth; g.classList.add("shake");
+  if (gateTries > gateMsgs.length) {
+    $("#gateHint").textContent = "Cevap 14 Şubat. Yine de içeri alıyorum, bugün senin günün.";
+    gDay.value = String(CONFIG.birth.day).padStart(2, "0"); gMonth.value = String(CONFIG.birth.month).padStart(2, "0");
+    setTimeout(unlockGate, 1400);
+  } else $("#gateHint").textContent = gateMsgs[gateTries - 1];
+});
+
+/* Dünyadaki zamanın */
+const BIRTH = new Date(CONFIG.birth.year, CONFIG.birth.month - 1, CONFIG.birth.day);
+let lifeTimer = null;
+function startLifetime() {
+  const el = $("#lifeSec"), fmt = n => Math.floor(n).toLocaleString("tr-TR");
+  const secs = () => (Date.now() - BIRTH) / 1000;
+  const now = new Date();
+  let turns = now.getFullYear() - CONFIG.birth.year;
+  if (now < new Date(now.getFullYear(), CONFIG.birth.month - 1, CONFIG.birth.day)) turns--;
+  const s = secs(), days = Math.floor(s / 86400), beats = Math.round(s / 60 * 85 / 1e6);
+  $("#lifeFacts").textContent = `Yani tam ${days.toLocaleString("tr-TR")} gün. Bu sürede Dünya güneşin etrafında ${turns} tur attı, kalbin de yaklaşık ${beats.toLocaleString("tr-TR")} milyon kez attı.`;
+  clearInterval(lifeTimer);
+  const t0 = performance.now();
+  const anim = t => {
+    const p = reduced ? 1 : Math.min(1, (t - t0) / 1800), e = 1 - Math.pow(1 - p, 4);
+    el.textContent = fmt(secs() * e);
+    if (p < 1) requestAnimationFrame(anim);
+    else lifeTimer = setInterval(() => el.textContent = fmt(secs()), 1000);
+  };
+  requestAnimationFrame(anim);
+}
 
 /* 1 — Hediye */
 let giftClicks = 0;
@@ -842,7 +1039,7 @@ gift.addEventListener("click", () => {
     const [x, y] = center(gift);
     confetti(x, y - 40, 220, 14);
     setTimeout(() => { rocket(W * .25); rocket(W * .75); }, 400);
-    setTimeout(() => show($("#giftReveal")), 650);
+    setTimeout(() => { show($("#giftReveal")); startLifetime(); }, 650);
   }
 });
 function resetGift() {
@@ -909,30 +1106,39 @@ $("#blowAll").addEventListener("click", () => {
   $$(".candle:not(.out)").forEach((c, i) => setTimeout(() => blow(c), i * 110));
 });
 
-/* 3 — Balonlar */
-let popped = 0;
-function buildBalloons() {
-  const sky = $("#sky"); sky.innerHTML = ""; $("#notes").innerHTML = "";
-  popped = 0; $("#balloonNext").hidden = true;
+/* 3 — Deniz kabukları */
+let opened = 0;
+const SHELL_COLORS = ["--pink", "--cream", "--coral", "--lilac", "--butter", "--sky"].map(tok);
+function buildShells() {
+  const beach = $("#beach"); beach.innerHTML = ""; $("#notes").innerHTML = "";
+  opened = 0; $("#shellNext").hidden = true;
   CONFIG.reasons.forEach((txt, i) => {
-    const b = document.createElement("button");
-    const color = COLORS[i % COLORS.length];
-    b.className = "balloon"; b.style.setProperty("--c", color); b.style.setProperty("--d", `${-rand(0, 3).toFixed(2)}s`);
-    b.setAttribute("aria-label", `Balon ${i + 1}, patlat`);
+    const w = document.createElement("div");
+    w.className = "shell-wrap";
+    w.innerHTML = '<span class="pearl"></span><button class="shell"></button>';
+    const b = w.lastChild, color = SHELL_COLORS[i % SHELL_COLORS.length];
+    b.style.setProperty("--c", color); b.style.setProperty("--d", `${-rand(0, 4.5).toFixed(2)}s`);
+    b.setAttribute("aria-label", `Deniz kabuğu ${i + 1}, aç`);
     b.addEventListener("click", () => {
-      b.classList.add("popped"); sfx.pop();
-      const [x, y] = center(b);
-      sparks(x, y, color, 50, 5); confetti(x, y, 30, 6);
+      if (w.classList.contains("open")) return;
+      w.classList.add("open"); sfx.pop();
+      setTimeout(() => {
+        const [x, y] = center(w.firstChild);
+        sparks(x, y, tok("--cream"), 36, 3.5);
+      }, 300);
       const li = document.createElement("li");
       li.style.setProperty("--c", color);
       li.innerHTML = "<i></i><span></span>"; li.lastChild.textContent = txt;
       $("#notes").prepend(li);
-      popped++;
-      if (popped === CONFIG.reasons.length) {
-        setTimeout(() => { show($("#balloonNext")); toast("Hepsini buldun. Aslında liste çok daha uzun"); heartRain(50); }, 400);
+      if (++opened === CONFIG.reasons.length) {
+        setTimeout(() => {
+          show($("#shellNext")); sfx.chime();
+          toast("Hepsini buldun. Aslında liste çok daha uzun");
+          const [x, y] = center($("#beach")); confetti(x, y, 120, 10);
+        }, 500);
       }
     });
-    sky.appendChild(b);
+    beach.appendChild(w);
   });
 }
 
@@ -1037,9 +1243,31 @@ function typeLetter() {
   $("#letter").onclick = finish;
 }
 
-/* 6 — Final */
+/* 6 — Ne zaman ihtiyacın olursa aç */
+function resetOpenWhen() {
+  const list = $("#owList"); list.innerHTML = ""; $("#owNext").hidden = true;
+  CONFIG.openWhen.forEach(o => {
+    const b = document.createElement("button");
+    b.className = "ow"; b.setAttribute("aria-label", `${o.label} aç`);
+    b.innerHTML = '<span class="ow-inner"><span class="ow-face ow-front"><small>Aç:</small><strong></strong></span><span class="ow-face ow-back"></span></span>';
+    b.querySelector(".ow-front").style.setProperty("--c", tok(o.color));
+    b.querySelector("strong").textContent = o.label;
+    b.querySelector(".ow-back").textContent = o.text;
+    b.addEventListener("click", () => {
+      if (b.classList.contains("open")) return;
+      b.classList.add("open"); sfx.whoosh();
+      const [x, y] = center(b); sparks(x, y, tok(o.color), 30, 4);
+      if ($("#owNext").hidden) setTimeout(() => show($("#owNext")), 900);
+    });
+    list.appendChild(b);
+  });
+}
+
+/* 7 — Final */
 let showTimer = null;
 function buildFinale() {
+  document.body.classList.remove("dawn");
+  $("#finA").hidden = false; $("#finB").hidden = true;
   const t = $("#finaleTitle"); t.innerHTML = "";
   let k = 0;
   "İyi ki doğdun".split(" ").forEach(w => {
@@ -1056,13 +1284,43 @@ function buildFinale() {
   let n = 0; clearInterval(showTimer);
   showTimer = setInterval(() => { rocket(rand(W * .1, W * .9)); if (++n > 22) clearInterval(showTimer); }, reduced ? 1200 : 420);
 }
+const dawned = () => document.body.classList.contains("dawn");
 $("#finale").addEventListener("click", e => {
-  if (e.target.closest("button")) return;
+  if (e.target.closest("button") || dawned()) return;
   rocket(e.clientX, e.clientY);
 });
 document.querySelector(".stage").addEventListener("click", e => {
-  if (current === 5 && e.target === e.currentTarget) rocket(e.clientX, e.clientY);
+  if (sceneId() === "finale" && !dawned() && e.target === e.currentTarget) rocket(e.clientX, e.clientY);
 });
+
+/* Buket */
+function buildBouquet() {
+  const F = [[120, 58, "--pink"], [70, 90, "--coral"], [170, 90, "--lilac"], [95, 126, "--butter"], [147, 124, "--pink-deep"], [44, 128, "--sky"], [196, 128, "--mint"]];
+  const L = [[88, 158, -35], [152, 156, 35], [108, 142, -20], [134, 174, 25], [62, 150, -50], [180, 150, 50]];
+  let h = "";
+  F.forEach(([x, y], i) => h += `<path class="stem" style="--i:${i}" d="M120 214 Q${(120 + x) / 2} ${(214 + y) / 2 + 12} ${x} ${y}"/>`);
+  L.forEach(([x, y, a], i) => h += `<g transform="translate(${x} ${y}) rotate(${a})"><ellipse class="leaf" style="--i:${i}" rx="13" ry="5"/></g>`);
+  for (let i = 0; i < 18; i++) {
+    const a = rand(0, Math.PI), r = rand(40, 95);
+    h += `<circle class="dot" style="--i:${i}" cx="${(120 + Math.cos(a) * r * 1.1).toFixed(1)}" cy="${(150 - Math.sin(a) * r).toFixed(1)}" r="${rand(2, 3.4).toFixed(1)}"/>`;
+  }
+  F.forEach(([x, y, c], i) => {
+    let petals = "";
+    for (let k = 0; k < 6; k++) petals += `<ellipse class="petal" cx="0" cy="-11" rx="8" ry="12" transform="rotate(${k * 60})"/>`;
+    const cc = c === "--butter" ? "var(--coral)" : "var(--butter)";
+    h += `<g transform="translate(${x} ${y})"><g class="flower" style="--i:${i};--c:var(${c});--cc:${cc}">${petals}<circle class="fc" r="6"/></g></g>`;
+  });
+  h += `<path class="wrap" d="M54 164 L186 164 L142 254 L98 254 Z"/><path class="fold" d="M120 164 L120 254 M86 164 L110 254 M154 164 L130 254"/><rect class="ribbon" x="102" y="206" width="36" height="11" rx="3"/>`;
+  $("#bouquet").innerHTML = h;
+}
+function toDawn() {
+  if (sceneId() !== "finale" || dawned()) return;
+  clearInterval(showTimer);
+  document.body.classList.add("dawn");
+  $("#finA").hidden = true;
+  buildBouquet(); show($("#finB"));
+  sfx.chime();
+}
 $("#hearts").addEventListener("click", () => { heartRain(110); sfx.chime(); });
 $("#finaleLead").textContent = `${CONFIG.age}. yaşın kutlu olsun. Gökyüzüne dokun, havai fişek patlasın.`;
 
@@ -1135,19 +1393,21 @@ function endGaze() {
   document.body.classList.remove("gazing");
   if (cons) cons.fading = true;
   if (reduced) { cons = null; drawStars(0); }
+  toDawn();
 }
 $("#gaze").addEventListener("click", gaze);
 document.addEventListener("click", () => {
-  if (document.body.classList.contains("gazing") && performance.now() - gazeStart > 3000) endGaze();
+  if (document.body.classList.contains("gazing") && performance.now() - gazeStart > 6500) endGaze();
 });
 
 $("#restart").addEventListener("click", () => {
   clearInterval(showTimer);
-  resetGift(); buildCandles(); buildBalloons(); resetLetter();
-  go(0);
+  resetGift(); buildCandles(); buildShells(); resetLetter(); resetOpenWhen();
+  document.body.classList.remove("dawn");
+  go(1);
 });
 
-const enter = { 3: initScratch, 4: resetLetter, 5: buildFinale };
+const enter = { "s-coupon": initScratch, "s-bottle": resetLetter, "finale": buildFinale };
 
 /* Gizli sürpriz: aya 5 kez dokun */
 let moonTaps = 0;
@@ -1168,10 +1428,10 @@ $("#moon").addEventListener("click", () => {
 resize();
 addEventListener("resize", () => {
   resize();
-  if (current === 3 && !scratchDone) initScratch();
+  if (sceneId() === "s-coupon" && !scratchDone) initScratch();
   if (cons && !cons.fading) { const st = cons.start; cons = buildConstellation(); cons.start = st; }
 });
-buildCandles(); buildBalloons();
+buildCandles(); buildShells(); resetOpenWhen();
 go(0);
 if (!reduced) requestAnimationFrame(bgLoop);
 </script>
