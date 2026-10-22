@@ -20,6 +20,8 @@
 
 </div>
 
+<p align="center"><a href="https://yigitbuyukeren.com/dogum-gunu/"><img src="docs/demo.gif" width="300" alt="Doğum Günü Sürprizi demosu: giriş kapısı, açılan hediye kutusu ve canlı sayaç, pasta, deniz kabukları, kazı kazan ve final sahneleri sırayla"></a></p>
+
 <details open>
 <summary><h2>🇹🇷 Türkçe</h2></summary>
 
