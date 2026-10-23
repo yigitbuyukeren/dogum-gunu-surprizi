@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Kalp şeklinde QR kod üretici.
 
-Kullanım: python3 tools/kalp-qr.py https://site-adresin -o kalp-qr.png -t "Ada için"
+Kullanım: python3 tools/kalp-qr.py https://site-adresin -o kalp-qr.png -t "Defne için"
 Gerekenler: pip install qrcode pillow
 """
 import sys, random, math
