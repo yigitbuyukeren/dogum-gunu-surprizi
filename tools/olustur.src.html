@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sürprizini Oluştur</title>
+<meta name="description" content="Doğum günü sürprizini kendi cümlelerinle kişiselleştir, hazır HTML dosyasını indir. Kayıt yok, her şey tarayıcında olur.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,900,100&family=Figtree:wght@400;600;700&display=swap">
+<style>
+:root {
+  --night: #1b1033; --night-2: #2c1957; --ink: #fff3e8; --muted: #cbbde8;
+  --pink: #ff7eb6; --butter: #ffd166; --mint: #7ce7c9; --coral: #ff8a5b;
+  --card: rgba(255, 255, 255, .06); --line: rgba(255, 255, 255, .16);
+  --display: "Fraunces", Georgia, serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--night); }
+body {
+  margin: 0; min-height: 100vh; color: var(--ink); font: 400 16px/1.55 var(--body);
+  background: radial-gradient(120% 70% at 50% 110%, var(--night-2), var(--night) 60%) fixed;
+  -webkit-tap-highlight-color: transparent;
+}
+a { color: var(--butter); }
+h1, h2 { font-family: var(--display); font-weight: 900; font-variation-settings: "SOFT" 100; margin: 0; line-height: 1.1; text-wrap: balance; }
+h1 { font-size: clamp(30px, 6vw, 46px); }
+h2 { font-size: 22px; }
+.wrap {
+  max-width: 1120px; margin: 0 auto;
+  padding: 36px max(16px, env(safe-area-inset-right)) 64px max(16px, env(safe-area-inset-left));
+}
+header { display: grid; gap: 12px; margin-bottom: 28px; max-width: 640px; }
+.eyebrow { margin: 0; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--butter); }
+header p { margin: 0; color: var(--muted); }
+.layout { display: grid; gap: 28px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr) 390px; } .preview { position: sticky; top: 20px; } }
+
+fieldset { border: 1px solid var(--line); border-radius: 18px; background: var(--card); margin: 0 0 16px; padding: 18px 18px 6px; min-width: 0; }
+legend { padding: 0 8px; font: 900 18px/1.2 var(--display); font-variation-settings: "SOFT" 100; }
+.field { display: grid; gap: 6px; margin-bottom: 14px; }
+.field > span { font-size: 14px; font-weight: 600; }
+.field small { color: var(--muted); font-size: 13px; line-height: 1.4; }
+.row2 { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 520px) { .row2 { grid-template-columns: 1fr; } }
+input, textarea {
+  width: 100%; font: inherit; color: var(--ink);
+  background: rgba(255, 255, 255, .07); border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 13px;
+}
+input::placeholder, textarea::placeholder { color: var(--muted); opacity: .6; }
+input:focus, textarea:focus { outline: none; border-color: var(--butter); }
+input[type="date"] { color-scheme: dark; }
+textarea { resize: vertical; min-height: 96px; line-height: 1.45; }
+.envelope { border-top: 1px dashed var(--line); padding-top: 14px; }
+.envelope:first-of-type { border-top: 0; padding-top: 0; }
+details { margin: 0 0 16px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); padding: 4px 18px; }
+summary { cursor: pointer; padding: 12px 0; font: 900 18px/1.2 var(--display); font-variation-settings: "SOFT" 100; }
+details[open] summary { margin-bottom: 6px; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 8px; }
+.btn {
+  font: 700 16px/1 var(--body); color: var(--night); background: var(--butter); border: 0; border-radius: 999px;
+  padding: 15px 26px; cursor: pointer; box-shadow: 0 5px 0 #c99a2e;
+  transition: transform .15s, box-shadow .15s;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #c99a2e; }
+.btn.ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--muted); }
+.btn.ghost:active { box-shadow: inset 0 0 0 2px var(--muted); }
+button:focus-visible, summary:focus-visible { outline: 3px solid var(--mint); outline-offset: 3px; }
+.errors { margin: 0 0 14px; padding: 12px 16px 12px 34px; border-radius: 14px; background: rgba(255, 126, 182, .14); border: 1px solid var(--pink); color: var(--ink); }
+.errors[hidden] { display: none; }
+.errors li { margin: 2px 0; }
+.note { color: var(--muted); font-size: 14px; }
+
+.preview h2 { margin-bottom: 12px; }
+.scenes { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.scenes button {
+  font: 600 13px/1 var(--body); color: var(--ink); background: rgba(255, 255, 255, .08);
+  border: 1px solid var(--line); border-radius: 999px; padding: 8px 11px; cursor: pointer;
+}
+.scenes button:hover { border-color: var(--butter); }
+.frame { border: 1.5px solid var(--line); border-radius: 26px; overflow: hidden; background: var(--night); height: min(680px, 78vh); }
+.frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.frame .empty { height: 100%; display: grid; place-items: center; padding: 28px; text-align: center; color: var(--muted); }
+
+.steps { margin: 36px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+@media (min-width: 700px) { .steps { grid-template-columns: repeat(3, 1fr); } }
+.steps li { border: 1px solid var(--line); border-radius: 16px; padding: 14px 16px; background: var(--card); font-size: 15px; color: var(--muted); }
+.steps b { display: block; color: var(--ink); font-family: var(--display); font-variation-settings: "SOFT" 100; font-size: 17px; margin-bottom: 2px; }
+footer { margin-top: 36px; color: var(--muted); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Doğum Günü Sürprizi</p>
+    <h1>Kendi sürprizini oluştur</h1>
+    <p>Aşağıdaki alanları kendi cümlelerinle doldur, hazır dosyayı indir. Hiçbir şey sunucuya gönderilmez: her şey bu sayfada, tarayıcında olur.</p>
+  </header>
+
+  <div class="layout">
+    <form id="form" novalidate autocomplete="off">
+      <ul class="errors" id="errors" role="alert" hidden></ul>
+
+      <fieldset>
+        <legend>Kim için?</legend>
+        <div class="row2">
+          <label class="field"><span>Adı</span><input id="name" maxlength="20" placeholder="Defne"><small>Finalde yıldızlar bu adı yazar.</small></label>
+          <label class="field"><span>Doğum tarihi</span><input id="birth" type="date" min="1900-01-01"><small>Giriş sorusu, sayaç ve ay evresi buna göre hesaplanır.</small></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Şişedeki mektup</legend>
+        <label class="field"><span>Mektup</span><textarea id="letter" rows="11" maxlength="1500"></textarea><small><code>{isim}</code> ve <code>{yas}</code> yazarsan kendiliğinden dolar. En güzel sonuç kendi cümlelerinle çıkar.</small></label>
+        <label class="field"><span>İmza</span><input id="signature" maxlength="40"></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Deniz kabukları</legend>
+        <label class="field"><span>Her satır bir kabuk (3 ile 10 arası)</span><textarea id="reasons" rows="8"></textarea><small>Her kabuğun içinden bir inci ve bir cümle çıkar.</small></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Kazı kazan kuponu</legend>
+        <label class="field"><span>Kupon başlığı</span><input id="couponTitle" maxlength="40"></label>
+        <label class="field"><span>Kupon yazısı</span><textarea id="couponText" rows="3" maxlength="240"></textarea></label>
+      </fieldset>
+
+      <fieldset id="openWhenSet">
+        <legend>"Ne zaman ihtiyacın olursa aç" zarfları</legend>
+        <p class="note" style="margin-top:0">En az bir zarf doldur, boş bıraktığın satırlar sayılmaz.</p>
+      </fieldset>
+
+      <details>
+        <summary>Başlıklar ve ara cümleler</summary>
+        <p class="note">Sayfanın her yerindeki sabit cümleleri değiştirebilirsin. Çoğu zaman olduğu gibi bırakmak yeter.</p>
+        <div id="textsBox"></div>
+      </details>
+
+      <details>
+        <summary>Gelişmiş</summary>
+        <div class="row2">
+          <label class="field"><span>Yaş</span><input id="age" inputmode="numeric" placeholder="Otomatik"><small>Boşsa bu yılki yaş hesaplanır.</small></label>
+          <label class="field"><span>Mum sayısı</span><input id="candles" inputmode="numeric" placeholder="Otomatik"><small>Boşsa yaş kadar (en çok 20).</small></label>
+        </div>
+        <div class="row2">
+          <label class="field"><span>Yıldızın adı</span><input id="starName" maxlength="30" placeholder="Otomatik"></label>
+          <label class="field"><span>Uzaklığı (ışık yılı)</span><input id="starLy" inputmode="decimal" placeholder="Otomatik"><small>Boşsa yaşına en yakın uzaklıktaki ünlü bir yıldız seçilir. "Doğduğun gün yola çıkan ışık" cümlesi ışık yılı yaşa yakınken anlamlı olur.</small></label>
+        </div>
+      </details>
+
+      <div class="actions">
+        <button class="btn" type="button" id="download">Sürprizi indir</button>
+        <button class="btn ghost" type="button" id="previewBtn">Önizle</button>
+        <button class="btn ghost" type="button" id="reset">Örneğe dön</button>
+      </div>
+      <p class="note">İndirilen dosya tek bir <code>.html</code>. Çift tıklayıp açabilir ya da istediğin yere yükleyebilirsin.</p>
+    </form>
+
+    <aside class="preview" id="previewBox">
+      <h2>Önizleme</h2>
+      <div class="scenes" id="scenes" aria-label="Sahneye git"></div>
+      <div class="frame" id="frame"><div class="empty">"Önizle" düğmesine bas, sürprizin burada açılsın.</div></div>
+    </aside>
+  </div>
+
+  <ol class="steps">
+    <li><b>1. Doldur</b>Adı, doğum tarihini ve kendi cümlelerini yaz.</li>
+    <li><b>2. İndir</b>Kişiselleştirilmiş tek bir HTML dosyası iner.</li>
+    <li><b>3. Paylaş</b>Dosyayı gönder ya da GitHub Pages gibi bir yere yükleyip adresini paylaş.</li>
+  </ol>
+  <footer>Hiçbir şey kaydedilmez ve sunucuya gönderilmez. <a href="../">Demoyu gör</a> · <a href="https://github.com/yigitbuyukeren/dogum-gunu-surprizi">Kaynak kod</a></footer>
+</div>
+
+<script>
+const SABLON = /*__SABLON__*/"";
+
+const $ = s => document.querySelector(s);
+const MARK = /\/\* CONFIG:BASLA \*\/[\s\S]*?\/\* CONFIG:BITIR \*\//;
+const COLORS = ["--sky", "--butter", "--mint", "--coral"];
+const TEXT_LABELS = {
+  wish: "Kutlama cümlesi (hediye, final ve gün doğumunda)",
+  gateEyebrow: "Giriş: üst yazı", gateTitle: "Giriş: başlık", gateQuestion: "Giriş: soru",
+  gateReveal: "Giriş: üç yanlıştan sonra ({tarih} yerine cevap gelir)",
+  giftEyebrow: "Hediye: üst yazı", giftTitle: "Hediye: başlık",
+  bottleEyebrow: "Şişe: üst yazı", shellsDone: "Tüm kabuklar açılınca çıkan not",
+  finaleLead: "Final: alt yazı", gazeTitle: "Gökyüzü: başlık", gazeSub: "Gökyüzü: alt yazı",
+  dawnTitle: "Gün doğumu: başlık", dawnLead: "Gün doğumu: alt yazı"
+};
+
+// Şablondaki varsayılan CONFIG'i oku
+const DEFAULTS = new Function(SABLON.match(MARK)[0] + "; return CONFIG;")();
+
+function el(tag, attrs, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs || {})) e[k] = v;
+  e.append(...kids);
+  return e;
+}
+
+// Zarf ve metin alanlarını kur
+const owSet = $("#openWhenSet");
+COLORS.slice(0, 3).forEach((_, i) => {
+  const box = el("div", { className: "envelope" });
+  box.append(
+    el("label", { className: "field" }, el("span", {}, `Zarf ${i + 1}: başlık`), el("input", { id: "owLabel" + i, maxLength: 40 })),
+    el("label", { className: "field" }, el("span", {}, `Zarf ${i + 1}: mesaj`), el("textarea", { id: "owText" + i, rows: 3, maxLength: 300 }))
+  );
+  owSet.append(box);
+});
+const textsBox = $("#textsBox");
+for (const k of Object.keys(DEFAULTS.texts)) {
+  textsBox.append(el("label", { className: "field" }, el("span", {}, TEXT_LABELS[k] || k), el("input", { id: "tx_" + k, maxLength: 160 })));
+}
+const SCENES = ["Giriş", "Hediye", "Pasta", "Kabuklar", "Kupon", "Mektup", "Zarflar", "Final"];
+SCENES.forEach((n, i) => $("#scenes").append(el("button", { type: "button", textContent: n, onclick: () => gotoScene(i) })));
+
+function pad(n) { return String(n).padStart(2, "0"); }
+function fillForm(c) {
+  $("#name").value = c.name;
+  $("#birth").value = `${c.birth.year}-${pad(c.birth.month)}-${pad(c.birth.day)}`;
+  $("#letter").value = c.letter;
+  $("#signature").value = c.signature;
+  $("#reasons").value = c.reasons.join("\n");
+  $("#couponTitle").value = c.coupon.title;
+  $("#couponText").value = c.coupon.text;
+  COLORS.slice(0, 3).forEach((_, i) => {
+    const o = c.openWhen[i];
+    $("#owLabel" + i).value = o ? o.label : "";
+    $("#owText" + i).value = o ? o.text : "";
+  });
+  for (const k of Object.keys(c.texts)) $("#tx_" + k).value = c.texts[k];
+  $("#age").value = c.age || "";
+  $("#candles").value = c.candles || "";
+  $("#starName").value = c.star ? c.star.name : "";
+  $("#starLy").value = c.star ? c.star.ly : "";
+}
+
+// Formdan CONFIG üret; hata varsa listeyle döner
+function readForm() {
+  const errs = [];
+  const c = JSON.parse(JSON.stringify(DEFAULTS));
+  c.name = $("#name").value.trim();
+  if (!c.name) errs.push("Bir ad yaz.");
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec($("#birth").value);
+  if (!m) errs.push("Doğum tarihini seç.");
+  else {
+    const [y, mo, d] = [+m[1], +m[2], +m[3]], dt = new Date(y, mo - 1, d);
+    if (dt.getMonth() !== mo - 1 || dt.getDate() !== d || y < 1900) errs.push("Doğum tarihi geçerli görünmüyor.");
+    else if (dt > new Date()) errs.push("Doğum tarihi gelecekte olamaz.");
+    else c.birth = { day: d, month: mo, year: y };
+  }
+  c.letter = $("#letter").value.trim();
+  if (!c.letter) errs.push("Mektup boş olamaz.");
+  c.signature = $("#signature").value.trim();
+  c.reasons = $("#reasons").value.split("\n").map(s => s.trim()).filter(Boolean);
+  if (c.reasons.length < 3 || c.reasons.length > 10) errs.push(`Deniz kabukları için 3 ile 10 arası satır yaz (şu an ${c.reasons.length}).`);
+  c.coupon = { title: $("#couponTitle").value.trim(), text: $("#couponText").value.trim() };
+  if (!c.coupon.title || !c.coupon.text) errs.push("Kuponun başlığını ve yazısını doldur.");
+  c.openWhen = [];
+  COLORS.slice(0, 3).forEach((col, i) => {
+    const label = $("#owLabel" + i).value.trim(), text = $("#owText" + i).value.trim();
+    if (label && text) c.openWhen.push({ label, color: DEFAULTS.openWhen[i] ? DEFAULTS.openWhen[i].color : col, text });
+    else if (label || text) errs.push(`Zarf ${i + 1} için hem başlık hem mesaj yaz ya da ikisini de boş bırak.`);
+  });
+  if (!c.openWhen.length) errs.push("En az bir zarf doldur.");
+  for (const k of Object.keys(DEFAULTS.texts)) {
+    c.texts[k] = $("#tx_" + k).value.trim();
+    if (!c.texts[k]) errs.push(`"${TEXT_LABELS[k] || k}" boş olamaz (Gelişmiş bölümünde).`);
+  }
+  const num = (id, label, min, max) => {
+    const raw = $(id).value.trim().replace(",", ".");
+    if (!raw) return null;
+    const n = Number(raw);
+    if (!isFinite(n) || n < min || n > max) { errs.push(`${label} ${min} ile ${max} arasında bir sayı olmalı.`); return null; }
+    return n;
+  };
+  c.age = num("#age", "Yaş", 1, 120);
+  c.candles = num("#candles", "Mum sayısı", 1, 60);
+  const sn = $("#starName").value.trim(), sl = num("#starLy", "Uzaklık", 0.1, 100000);
+  if (sn || $("#starLy").value.trim()) {
+    if (sn && sl) c.star = { name: sn, ly: sl };
+    else { c.star = null; errs.push("Yıldız için hem adı hem uzaklığı yaz ya da ikisini de boş bırak."); }
+  } else c.star = null;
+  return { c, errs };
+}
+
+function buildHtml(cfg) {
+  const lit = JSON.stringify(cfg, null, 2).replace(/</g, "\\u003c")
+    .split(String.fromCharCode(0x2028)).join("\\u2028").split(String.fromCharCode(0x2029)).join("\\u2029");
+  const block = "/* CONFIG:BASLA */\nconst CONFIG = " + lit + ";\n/* CONFIG:BITIR */";
+  return SABLON.replace(MARK, () => block);
+}
+
+function validated() {
+  const { c, errs } = readForm();
+  const box = $("#errors");
+  box.replaceChildren(...errs.map(e => el("li", {}, e)));
+  box.hidden = !errs.length;
+  if (errs.length) box.scrollIntoView({ behavior: "smooth", block: "center" });
+  return errs.length ? null : c;
+}
+
+function slug(s) {
+  const map = { "ç": "c", "ğ": "g", "ı": "i", "İ": "i", "ö": "o", "ş": "s", "ü": "u" };
+  return s.toLowerCase().replace(/[çğıİöşü]/g, ch => map[ch]).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "surpriz";
+}
+
+$("#download").addEventListener("click", () => {
+  const c = validated(); if (!c) return;
+  const url = URL.createObjectURL(new Blob([buildHtml(c)], { type: "text/html;charset=utf-8" }));
+  const a = el("a", { href: url, download: `dogum-gunu-${slug(c.name)}.html` });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+});
+
+function preview() {
+  const c = validated(); if (!c) return false;
+  const f = el("iframe", { title: "Önizleme", srcdoc: buildHtml(c) });
+  f.setAttribute("allow", "autoplay");
+  $("#frame").replaceChildren(f);
+  if (matchMedia("(max-width: 899px)").matches) $("#previewBox").scrollIntoView({ behavior: "smooth" });
+  return true;
+}
+$("#previewBtn").addEventListener("click", preview);
+function gotoScene(i) {
+  if (!$("#frame iframe") && !preview()) return;
+  const f = $("#frame iframe");
+  const run = () => { try { f.contentWindow.go(i); } catch (e) {} };
+  if (f.contentDocument && f.contentDocument.readyState === "complete" && f.contentWindow.go) run();
+  else f.addEventListener("load", () => setTimeout(run, 50), { once: true });
+}
+$("#reset").addEventListener("click", () => {
+  if (!confirm("Yazdıkların silinip örnek içerik geri gelsin mi?")) return;
+  fillForm(DEFAULTS);
+  $("#errors").hidden = true;
+});
+$("#form").addEventListener("submit", e => e.preventDefault());
+
+fillForm(DEFAULTS);
+</script>
+</body>
+</html>
