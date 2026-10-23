@@ -7,7 +7,7 @@
 
 <div align="center">
 
-**[🎉 Canlı demo](https://yigitbuyukeren.com/dogum-gunu/)** &nbsp;·&nbsp; **[✏️ Kendi sürümünü hazırla](#️-kişiselleştirme)** &nbsp;·&nbsp; **[💗 Kalp QR kod](#-kalp-şeklinde-qr-kod)**
+**[🎉 Canlı demo](https://yigitbuyukeren.com/dogum-gunu/)** &nbsp;·&nbsp; **[✏️ Kendi sürprizini oluştur](https://yigitbuyukeren.com/dogum-gunu/olustur/)** &nbsp;·&nbsp; **[💗 Kalp QR kod](#-kalp-şeklinde-qr-kod)**
 
 [![Lisans: MIT](https://img.shields.io/badge/lisans-MIT-E8480C?style=flat-square&labelColor=16150F)](LICENSE)
 ![Tek dosya](https://img.shields.io/badge/tek-HTML%20dosyas%C4%B1-E8480C?style=flat-square&labelColor=16150F&logo=html5&logoColor=E34F26)
@@ -28,7 +28,9 @@
 Sevdiğin birine hazırlayabileceğin, animasyonlu ve interaktif bir doğum günü sayfası. **Tek bir HTML dosyası, kurulum gerektirmez.** Telefonda da bilgisayarda da çalışır.
 
 > [!TIP]
-> [Canlı demoyu](https://yigitbuyukeren.com/dogum-gunu/) aç. Girişteki "Doğum günün hangi gün?" sorusunun cevabı: **14 Şubat**.
+> [Canlı demoyu](https://yigitbuyukeren.com/dogum-gunu/) aç. Girişteki "Doğum günün hangi gün?" sorusunun cevabı: **14 Mayıs**.
+>
+> Kendi sürümünü kod yazmadan hazırlamak için **[oluşturma sayfasına](https://yigitbuyukeren.com/dogum-gunu/olustur/)** git.
 
 ### 📸 Sahneler
 
@@ -51,7 +53,7 @@ Sayfa sekiz sahneden oluşuyor:
 
 1. 🔒 **Giriş kapısı.** "Doğum günün hangi gün?" sorusu. Yanlış cevapta ipuçları doğum tarihinden kendiliğinden oluşur.
 2. 🎁 **Hediye kutusu.** Üç dokunuşta açılır. Altından canlı bir sayaç çıkar: dünyada geçirilen saniyeler, Dünya'nın güneş etrafındaki tur sayısı, uzayda alınan yol, görülen dolunaylar ve doğulan günün hangi gün olduğu.
-3. 🎂 **Pasta ve dilek feneri.** Yaşı kadar mum üflenir, sonra yazılan dilek bir fenerle gökyüzüne yükselir. Dilek hiçbir yere gönderilmez.
+3. 🎂 **Pasta ve dilek feneri.** Yaşı kadar mum (en çok 20) üflenir, sonra yazılan dilek bir fenerle gökyüzüne yükselir. Dilek hiçbir yere gönderilmez.
 4. 🐚 **Deniz kabukları.** Her kabuğun altında bir inci ve bir iltifat var.
 5. 🎟️ **Kazı kazan.** Altından bir hediye kuponu çıkar.
 6. 🍾 **Şişedeki mesaj.** Dalgaların arasından gelen şişeden harf harf yazılan bir mektup çıkar.
@@ -62,34 +64,43 @@ Sayfa sekiz sahneden oluşuyor:
 
 🎵 Müzik ve ses efektleri tarayıcıda üretilir (Web Audio), dışarıdan dosya yüklenmez.
 
-### ✏️ Kişiselleştirme
+### ✏️ Kendi sürprizini oluştur
 
-Her şey `index.html` içindeki `CONFIG` nesnesinden ayarlanır:
+**Kod yazmadan:** [Oluşturma sayfasını](https://yigitbuyukeren.com/dogum-gunu/olustur/) aç, adı, doğum tarihini ve kendi cümlelerini yaz, **Sürprizi indir**'e bas. Elinde ayarları içine gömülmüş tek bir `.html` dosyası olur. Hiçbir şey kaydedilmez ve sunucuya gönderilmez, her şey tarayıcında olur. Sayfadaki **Önizle** düğmesi ve sahne düğmeleriyle mektubu, kabukları, kuponu ve finali göndermeden önce görebilirsin.
+
+**Elle:** Aynı ayarlar `index.html` içindeki `CONFIG` nesnesinde durur (`CONFIG:BASLA` ve `CONFIG:BITIR` işaretleri arası). Metinlerde `{isim}` ve `{yas}` yazarsan kendiliğinden dolar.
 
 | Alan | Ne işe yarar |
 |---|---|
-| `name` | Adı. Yıldızlar bu adı yazar (Türk alfabesinin bütün harfleri desteklenir). |
+| `name` | Adı. Yıldızlar bu adı yazar (Türk alfabesinin ve Q, W, X harflerinin hepsi desteklenir). |
 | `birth` | Doğum tarihi. Giriş sorusu, ipuçları, sayaç ve ay evresi buna göre hesaplanır. |
-| `age`, `candles` | Boş bırakılırsa bu yılki yaş ve o kadar mum kullanılır. |
-| `star` | Finalde gösterilen yıldız. Yaşına yakın uzaklıkta (ışık yılı) bir yıldız seçersen "doğduğun gün yola çıkan ışık şimdi ulaşıyor" mesajı anlamlı olur. |
-| `reasons` | Deniz kabuklarından çıkan cümleler. |
+| `age`, `candles` | Boş bırakılırsa bu yılki yaş ve o kadar mum (en çok 20) kullanılır. |
+| `star` | Boş bırakılırsa yaşına en yakın uzaklıktaki ünlü bir yıldız seçilir ("doğduğun gün yola çıkan ışık şimdi ulaşıyor"). Elle: `{ name: "Vega", ly: 25 }`. |
+| `reasons` | Deniz kabuklarından çıkan cümleler (3 ile 10 arası). |
 | `coupon` | Kazı kazandan çıkan kupon. |
-| `letter` | Mektup. `null` bırakılırsa örnek mektup kullanılır. |
+| `letter`, `signature` | Şişedeki mektup ve imzası. |
 | `openWhen` | "Ne zaman ihtiyacın olursa aç" zarfları. |
-| `signature` | Mektubun imzası. |
+| `texts` | Sayfadaki başlıklar ve ara cümleler (kutlama cümlesi dahil). |
 
 💡 En güzel sonuç, mektuba ve kabuklara kendi cümlelerini yazınca çıkar.
 
 ### 🚀 Yayınlama
 
-Dosyayı doğrudan tarayıcıda açabilirsin. Paylaşmak için GitHub Pages kullanabilirsin:
+İndirdiğin dosyayı çift tıklayıp doğrudan tarayıcıda açabilirsin. Bir adres olarak paylaşmak için:
 
-1. Bu depoyu kendi hesabına fork'la.
-2. **Settings → Pages** bölümünde kaynak olarak `main` dalını seç.
-3. Birkaç dakika sonra sayfan `https://kullanici-adin.github.io/dogum-gunu-surprizi/` adresinde yayında olur.
+- **GitHub Pages:** Yeni bir depo aç, dosyayı `index.html` adıyla yükle, **Settings → Pages** bölümünde `main` dalını seç. Birkaç dakika sonra `https://kullanici-adin.github.io/depo-adi/` adresinde yayında olur.
+- **Sürükle-bırak servisleri:** Dosyanın bulunduğu klasörü Netlify Drop, Cloudflare Pages gibi servislere bırakmak yeter. Koşulları servise göre değişir.
 
 > [!WARNING]
-> **Gizlilik:** Açık bir depoya gerçek isim, doğum tarihi ya da kişisel bir mektup koyarsan bunları herkes görebilir. Kişisel sürümünü gizli (private) bir depoda tut ya da başka bir yerde yayınla.
+> **Gizlilik:** Açık bir depoya gerçek isim, doğum tarihi ya da kişisel bir mektup koyarsan bunları herkes görebilir. Kişiselleştirilmiş dosyayı gizli (private) bir depoda tut, dosya olarak gönder ya da adresi kimseyle paylaşma.
+
+### 🛠️ Geliştirme
+
+`olustur/index.html`, `tools/olustur.src.html` ile kökteki `index.html` (şablon) birleştirilerek üretilir. Şablonu ya da oluşturma sayfasını değiştirince yeniden üret:
+
+```bash
+python3 tools/build-olustur.py
+```
 
 ### 💗 Kalp şeklinde QR kod
 
@@ -99,7 +110,7 @@ Dosyayı doğrudan tarayıcıda açabilirsin. Paylaşmak için GitHub Pages kull
 
 ```bash
 pip install qrcode pillow
-python3 tools/kalp-qr.py https://site-adresin -o kalp-qr.png -t "Ada için"
+python3 tools/kalp-qr.py https://site-adresin -o kalp-qr.png -t "Defne için"
 ```
 
 🖨️ Basarken en az 5 cm genişlik ve açık renkli bir kağıt kullan. Yandaki örnek telefonla okutulabilir; canlı demoyu açar.
@@ -118,13 +129,13 @@ python3 tools/kalp-qr.py https://site-adresin -o kalp-qr.png -t "Ada için"
 An animated, interactive birthday page you can prepare for someone you love. **A single HTML file, no install.** Works on phones and computers. The page itself is in Turkish.
 
 > [!TIP]
-> Open the [live demo](https://yigitbuyukeren.com/dogum-gunu/). The answer to the entry question ("When is your birthday?") is **14 February**.
+> Open the [live demo](https://yigitbuyukeren.com/dogum-gunu/). The answer to the entry question ("When is your birthday?") is **14 May**. To make your own without writing code, use the [creator page](https://yigitbuyukeren.com/dogum-gunu/olustur/).
 
-**Eight scenes:** 🔒 an entry gate that builds hints from the birth date · 🎁 a gift box that opens after three taps and reveals a live counter (seconds alive, trips around the sun, distance travelled through space, full moons seen) · 🎂 candles to blow out and a wish lantern · 🐚 seashells hiding pearls and compliments · 🎟️ a scratch card with a gift coupon · 🍾 a message in a bottle typed letter by letter · 💌 "open when you need it" cards · 🎆 a finale with fireworks, the name written in the stars, a sunrise and a bouquet. 🌙 Tap the moon five times to see the moon phase on the night they were born.
+**Eight scenes:** 🔒 an entry gate that builds hints from the birth date · 🎁 a gift box that opens after three taps and reveals a live counter (seconds alive, trips around the sun, distance travelled through space, full moons seen) · 🎂 candles to blow out (up to 20) and a wish lantern · 🐚 seashells hiding pearls and compliments · 🎟️ a scratch card with a gift coupon · 🍾 a message in a bottle typed letter by letter · 💌 "open when you need it" cards · 🎆 a finale with fireworks, the name written in the stars, a sunrise and a bouquet. 🌙 Tap the moon five times to see the moon phase on the night they were born.
 
-**Make it yours:** everything lives in the `CONFIG` object in `index.html` (name, birth date, age, a star at the right distance in light years, compliments, coupon, letter, "open when" notes, signature). Music and sound effects are generated in the browser with Web Audio; nothing is loaded from outside.
+**Make it yours:** open the [creator page](https://yigitbuyukeren.com/dogum-gunu/olustur/), fill in the name, birth date and your own words, and download a ready-made single `.html` file. Nothing is saved or sent anywhere; it all happens in your browser. You can also edit the `CONFIG` object in `index.html` by hand (use `{isim}` and `{yas}` as placeholders for the name and age). The star is picked automatically from the age if you leave it empty. Music and sound effects are generated in the browser with Web Audio; the only outside request is the Google Fonts stylesheet.
 
-**Share it:** fork the repository and turn on GitHub Pages, or host the file anywhere. Keep personal versions in a private repository. `tools/kalp-qr.py` turns the address into a heart-shaped QR code that still scans.
+**Share it:** send the file, or put it on GitHub Pages or any static host. Keep personal versions out of public repositories. `tools/kalp-qr.py` turns the address into a heart-shaped QR code that still scans.
 
 Released under the [MIT License](LICENSE).
 
