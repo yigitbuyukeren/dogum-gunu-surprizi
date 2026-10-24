@@ -106,11 +106,12 @@ python3 tools/build-olustur.py
 
 <img src="docs/kalp-qr-ornek.png" width="200" align="right" alt="Canlı demoyu açan, kalp şeklinde örnek QR kod">
 
-`tools/kalp-qr.py` sitenin adresini kalp şeklinde bir QR koda dönüştürür. QR kod 45 derece döndürülür, iki üst kenarına yuvarlak "kulaklar" eklenir. En yüksek hata düzeltme seviyesi kullanıldığı için okunabilir kalır.
+Sitenin adresini kalp şeklinde bir QR koda dönüştürmek için ayrı bir araç var: **[Kalp QR](https://github.com/yigitbuyukeren/kalp-qr)**. Kod 45 derece döndürülür, iki üst kenarına yuvarlak "kulaklar" eklenir; en yüksek hata düzeltme seviyesi kullanıldığı için okunabilir kalır. Rengi ve altındaki yazıyı seçebilirsin.
 
 ```bash
-pip install qrcode pillow
-python3 tools/kalp-qr.py https://site-adresin -o kalp-qr.png -t "Defne için"
+git clone https://github.com/yigitbuyukeren/kalp-qr && cd kalp-qr
+pip install -r requirements.txt
+python3 kalp-qr.py https://site-adresin -o kalp-qr.png -t "Defne için"
 ```
 
 🖨️ Basarken en az 5 cm genişlik ve açık renkli bir kağıt kullan. Yandaki örnek telefonla okutulabilir; canlı demoyu açar.
@@ -135,7 +136,7 @@ An animated, interactive birthday page you can prepare for someone you love. **A
 
 **Make it yours:** open the [creator page](https://yigitbuyukeren.com/dogum-gunu/olustur/), fill in the name, birth date and your own words, and download a ready-made single `.html` file. Nothing is saved or sent anywhere; it all happens in your browser. You can also edit the `CONFIG` object in `index.html` by hand (use `{isim}` and `{yas}` as placeholders for the name and age). The star is picked automatically from the age if you leave it empty. Music and sound effects are generated in the browser with Web Audio; the only outside request is the Google Fonts stylesheet.
 
-**Share it:** send the file, or put it on GitHub Pages or any static host. Keep personal versions out of public repositories. `tools/kalp-qr.py` turns the address into a heart-shaped QR code that still scans.
+**Share it:** send the file, or put it on GitHub Pages or any static host. Keep personal versions out of public repositories. [Kalp QR](https://github.com/yigitbuyukeren/kalp-qr) turns the address into a heart-shaped QR code that still scans.
 
 Released under the [MIT License](LICENSE).
 
