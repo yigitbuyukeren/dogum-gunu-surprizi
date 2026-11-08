@@ -102,6 +102,12 @@ Sayfa sekiz sahneden oluşuyor:
 python3 tools/build-olustur.py
 ```
 
+Üretilen dosyanın güncel olup olmadığını denetlemek için `--check` kullan. Bu seçenek hiçbir dosya yazmaz; `olustur/index.html` üretilmesi gereken içerikle aynıysa `0`, dosya yoksa ya da eskiyse sıfır dışı kodla çıkar:
+
+```bash
+python3 tools/build-olustur.py --check
+```
+
 ### 💗 Kalp şeklinde QR kod
 
 <img src="docs/kalp-qr-ornek.png" width="200" align="right" alt="Canlı demoyu açan, kalp şeklinde örnek QR kod">
